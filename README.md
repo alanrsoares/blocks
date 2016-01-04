@@ -14,9 +14,7 @@ class Hello extends Component {
     super('#hello')
   }
   render() {
-    return h('span', {
-      id: 'hello',
-    }, [ t(this.state.name) ]);
+    return h('span', {}, [ t(this.state.name) ]);
   }
 }
 ```
@@ -47,7 +45,6 @@ class Counter extends Component {
 
   render() {
     return h('span', {
-      id: 'counter',
       class: 'ribbon'
     }, [ t(this.state.counter) ]);
   }

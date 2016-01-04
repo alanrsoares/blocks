@@ -47,12 +47,16 @@ export class Component {
     return $(this.selector);
   }
 
+  get renderedElement() {
+    return setAttrs(this.render(), { id: this.selector.substr(1) });
+  }
+
   mount(target, props = {}) {
     this.unmount();
     this.target = target;
     this.state = merge({}, props);
     if (isFunction(this.onMount)) { this.onMount(); }
-    append(this.target, [this.render()]);
+    append(this.target, [this.renderedElement]);
   }
 
   unmount() {
@@ -68,10 +72,8 @@ export class Component {
   update() {
     if (isFunction(this.onUpdate)) { this.onUpdate(this.state); }
 
-    const e = setAttrs(this.render(), { id: this.selector.substr(1) });
-    
     if (this.self) {
-      replace(this.self, e);
+      this.mount(this.target, this.state);
     }
   }
 }
