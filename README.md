@@ -7,9 +7,9 @@ Micro react-like, redux-compatible, plain js library for event-driven ui compone
 ```javascript
 import { h, t, Component } from 'blocks';
 
-class DraftsCounter extends Component {
+class Counter extends Component {
   constructor() {
-    super('#draftsCounter');
+    super('#counter');
   }
 
   increase() {
@@ -28,12 +28,12 @@ class DraftsCounter extends Component {
 
   render() {
     return h('span', {
-      id: 'draftsCounter',
+      id: 'counter',
       class: 'headerRibbon'
     }, [ t(this.state.counter) ]);
   }
 }
 
-export default new DraftsCounter();
+export default new Counter();
 
 ```
