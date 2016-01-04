@@ -68,8 +68,8 @@ export class Component {
   update() {
     if (isFunction(this.onUpdate)) { this.onUpdate(this.state); }
 
-    const e = this.render();
-
+    const e = setAttrs(this.render(), { id: this.selector.substr(1) });
+    
     if (this.self) {
       replace(this.self, e);
     }

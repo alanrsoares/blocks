@@ -2,7 +2,26 @@
 Micro react-like, redux-compatible, plain js library for event-driven ui components
 
 
-## Example
+## Examples
+
+> A simple component
+
+```javascript
+import { h, t, Component } from 'blocks';
+
+class Hello extends Component {
+  constructor() {
+    super('#hello')
+  }
+  render() {
+    return h('span', {
+      id: 'hello',
+    }, [ t(this.state.name) ]);
+  }
+}
+```
+
+> A component with lifecycle callbacks
 
 ```javascript
 import { h, t, Component } from 'blocks';
@@ -29,7 +48,7 @@ class Counter extends Component {
   render() {
     return h('span', {
       id: 'counter',
-      class: 'headerRibbon'
+      class: 'ribbon'
     }, [ t(this.state.counter) ]);
   }
 }
