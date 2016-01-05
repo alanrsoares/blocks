@@ -13,8 +13,8 @@ class Hello extends Component {
   constructor() {
     super('#hello')
   }
-  render() {
-    return h('span', {}, [ t(this.state.name) ]);
+  render({ name }) {
+    return h('span', {}, [ t(`Hello, ${ name }`) ]);
   }
 }
 ```
@@ -43,13 +43,11 @@ class Counter extends Component {
     }
   }
 
-  render() {
+  render({ counter }) {
     return h('span', {
       class: 'ribbon'
-    }, [ t(this.state.counter) ]);
+    }, [ t(counter) ]);
   }
 }
-
-export default new Counter();
 
 ```
