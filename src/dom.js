@@ -32,7 +32,7 @@ export const h = (tag, attrs = {}, children = []) =>
 export const t = (text) => document.createTextNode(text)
 
 export const mount = (componentClass, target, state) => {
-  export const className = `${componentClass}`.match(/function (\w+)/)[1]
+  const className = `${componentClass}`.match(/function ([A-Z]\w+)/)[1]
   return new componentClass(`#${target.id}_${className}`).mount(target, state)
 }
 
