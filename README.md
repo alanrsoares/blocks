@@ -49,6 +49,8 @@ class Counter extends Component {
 
 > A slightly complex counter
 
+[live exmaple](http://jsbin.com/jedezeveni/5/edit?js,output)
+
 ```javascript
 import { h, t, Component } from 'blocks';
 
