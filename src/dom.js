@@ -48,7 +48,7 @@ export class Component {
   }
 
   get renderedElement() {
-    return setAttrs(this.render(), { id: this.selector.substr(1) });
+    return setAttrs(this.render(this.state), { id: this.selector.substr(1) });
   }
 
   mount(target, props = {}) {
@@ -73,7 +73,7 @@ export class Component {
     if (isFunction(this.onUpdate)) { this.onUpdate(this.state); }
 
     if (this.self) {
-      this.mount(this.target, this.state);
+      replace(this.self, this.renderedElement);
     }
   }
 }
