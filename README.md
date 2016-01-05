@@ -12,12 +12,14 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 ```javascript
 import { h, t, Component } from 'blocks'
 
+const hello = (name) => h('span', {}, [ t(`Hello, ${ name }!`) ])
+
 class Hello extends Component {
   constructor() {
     super('#hello')
   }
   render({ name }) {
-    return h('span', {}, [ t(`Hello, ${ name }`) ])
+    return hello(name)
   }
 }
 ```
