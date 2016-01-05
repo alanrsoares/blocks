@@ -69,7 +69,6 @@ const counter = (n = 0) =>
     `
   }, [t(n)])
 
-
 const flip = () => Math.random() < .5
 
 class App extends Component {
