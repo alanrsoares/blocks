@@ -44,7 +44,6 @@ const callIfExist = (f, context) =>
 
 export class Component {
   constructor(selector) {
-    this.target = null
     this.selector = selector
     this.state = {}
   }
@@ -59,12 +58,16 @@ export class Component {
     })
   }
 
+  setState(partial = {}) {
+    this.state = { ...this.state, ...partial }
+    this.update()
+  }
+
   mount(target, props = {}) {
     this.unmount()
-    this.target = target
     this.state = { ...props }
     callIfExist(this.onMount, this)
-    append(this.target, [this.renderedElement])
+    append(target, [this.renderedElement])
   }
 
   unmount() {
@@ -72,15 +75,10 @@ export class Component {
     if (this.self) { remove(this.self) }
   }
 
-  setState(partial = {}) {
-    this.state = { ...this.state, ...partial }
-    this.update()
-  }
-
   update() {
     callIfExist(this.onUpdate, this)
     if (this.self) {
-      this.mount(this.target, this.state)
+      replace(this.self, this.renderedElement);
     }
   }
 }
