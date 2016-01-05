@@ -22,7 +22,5 @@
     "url": "https://github.com/alanrsoares/blocks/issues"
   },
   "homepage": "https://github.com/alanrsoares/blocks#readme",
-  "devDependencies": {
-    "prelude-es6": "^0.3.19"
-  }
+  "devDependencies": {}
 }
