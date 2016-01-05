@@ -1,6 +1,9 @@
 # blocks
-Micro react-like, redux-compatible, plain js library for event-driven ui components
+Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
+* minimal
+* standard
+* pure ES2015
 
 ## Examples
 
