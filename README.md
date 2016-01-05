@@ -37,12 +37,6 @@ class Counter extends Component {
     this.setState({ counter: this.state.counter - 1 });
   }
 
-  onUpdate({ counter }) {
-    if (!counter) {
-      this.unmount();
-    }
-  }
-
   render({ counter }) {
     return h('span', {
       class: 'ribbon'
@@ -50,4 +44,68 @@ class Counter extends Component {
   }
 }
 
+```
+
+
+> A slightly complex counter
+
+```javascript
+import { h, t, Component } from 'blocks';
+
+const KEYS = {
+  up: 38,
+  down: 40
+}
+
+const button = (label, onClick) =>
+  h('button', { onClick }, [t(label)])
+
+const counter = (n = 0) =>
+  h('div', {
+    class: 'counter',
+    style: `
+      color: ${ n > 0 ? '#3c3' : '#c33' };
+      background: ${ n > 0 ? '#cfc' : '#fcc' };
+    `
+  }, [t(n)])
+
+
+const flip = () => Math.random() < .5
+
+class App extends Component {
+  constructor() {
+    super('#app')
+  }
+
+  onMount() {
+    document.addEventListener('keyup', (e) => {
+      switch(e.which) {
+        case KEYS.up: this.inc(); break;
+        case KEYS.down: this.dec(); break;
+      }
+    })
+
+    this.state.interval = setInterval(() => flip() ? this.inc() : this.dec(), 1000)
+  }
+
+  onUnmount() {
+    this.state.interval = clearInterval(this.state.interval)
+  }
+
+  inc() {
+    this.setState({ count: this.state.count + 1})
+  }
+
+  dec() {
+    this.setState({ count: this.state.count - 1})    
+  }
+
+  render({ count }) {
+    return h('div', { class: 'app' }, [
+      button('-', this.dec.bind(this)),
+      counter(count),
+      button('+', this.inc.bind(this))
+    ])
+  }
+}
 ```
