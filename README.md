@@ -12,7 +12,8 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 ```javascript
 import { h, t, Component } from 'blocks'
 
-const hello = (name) => h('span', {}, [ t(`Hello, ${ name }!`) ])
+const hello = (name) =>
+  h('span', {}, [ t(`Hello, ${ name }!`) ])
 
 class Hello extends Component {
   constructor() {
@@ -51,7 +52,6 @@ class Counter extends Component {
 
 ```
 
-
 > A slightly complex counter
 
 Check out a [live exmaple](http://jsbin.com/faquhizoxi/edit?js,output) (hit `Run with JS`)
@@ -76,7 +76,7 @@ const counter = (n = 0) =>
     `
   }, [t(n)])
 
-const flip = () => Math.random() < .5
+const headsOrTails = () => Math.random() < .5
 
 class App extends Component {
   constructor() {
@@ -95,26 +95,30 @@ class App extends Component {
       }
     })
 
-    this.state.interval = setInterval(() => flip() ? this.inc() : this.dec(), 1000)
+    this.state.interval = setInterval(this.tick.bind(this), 1000)
   }
 
   onUnmount() {
     this.state.interval = clearInterval(this.state.interval)
   }
 
-  inc() {
+  increase() {
     this.setState({ count: this.state.count + 1})
   }
 
-  dec() {
+  tick() {
+    return headsOrTails() ? this.inc() : this.dec()
+  }
+
+  decrease() {
     this.setState({ count: this.state.count - 1})    
   }
 
   render({ count }) {
     return h('div', { class: 'app' }, [
-      button('-', this.dec.bind(this)),
+      button('-', this.decrease.bind(this)),
       counter(count),
-      button('+', this.inc.bind(this))
+      button('+', this.increase.bind(this))
     ])
   }
 }
