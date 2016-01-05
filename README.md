@@ -7,14 +7,14 @@ Micro react-like, redux-compatible, plain js library for event-driven ui compone
 > A simple component
 
 ```javascript
-import { h, t, Component } from 'blocks';
+import { h, t, Component } from 'blocks'
 
 class Hello extends Component {
   constructor() {
     super('#hello')
   }
   render({ name }) {
-    return h('span', {}, [ t(`Hello, ${ name }`) ]);
+    return h('span', {}, [ t(`Hello, ${ name }`) ])
   }
 }
 ```
@@ -22,25 +22,25 @@ class Hello extends Component {
 > A component with lifecycle callbacks
 
 ```javascript
-import { h, t, Component } from 'blocks';
+import { h, t, Component } from 'blocks'
 
 class Counter extends Component {
   constructor() {
-    super('#counter');
+    super('#counter')
   }
 
   increase() {
-    this.setState({ counter: this.state.counter + 1 });
+    this.setState({ counter: this.state.counter + 1 })
   }
 
   decrease() {
-    this.setState({ counter: this.state.counter - 1 });
+    this.setState({ counter: this.state.counter - 1 })
   }
 
   render({ counter }) {
     return h('span', {
       class: 'ribbon'
-    }, [ t(counter) ]);
+    }, [ t(counter) ])
   }
 }
 
@@ -52,11 +52,11 @@ class Counter extends Component {
 Check out a [live exmaple](http://jsbin.com/faquhizoxi/edit?js,output) (hit `Run with JS`)
 
 ```javascript
-import { h, t, Component } from 'blocks';
+import { h, t, Component } from 'blocks'
 
 const KEYS = {
-  up: 38,
-  down: 40
+  UP: 38,
+  DOWN: 40
 }
 
 const button = (label, onClick) =>
@@ -66,8 +66,8 @@ const counter = (n = 0) =>
   h('div', {
     class: 'counter',
     style: `
-      color: ${ n > 0 ? '#3c3' : '#c33' };
-      background: ${ n > 0 ? '#cfc' : '#fcc' };
+      color: ${ n > 0 ? '#3c3' : '#c33' }
+      background: ${ n > 0 ? '#cfc' : '#fcc' }
     `
   }, [t(n)])
 
@@ -81,8 +81,12 @@ class App extends Component {
   onMount() {
     document.addEventListener('keyup', (e) => {
       switch(e.which) {
-        case KEYS.up: this.inc(); break;
-        case KEYS.down: this.dec(); break;
+        case KEYS.UP:
+          this.inc()
+          break
+        case KEYS.DOWN:
+          this.dec()
+          break
       }
     })
 
