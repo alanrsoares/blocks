@@ -1,4 +1,4 @@
-# blocks
+# blocks `[WIP]`
 Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
 * minimal
