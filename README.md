@@ -10,19 +10,19 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 > A simple component
 
 ```javascript
-import { h, t, Component } from 'blocks'
+import { $, mount, h, t, Component } from 'blocks'
 
 const hello = (name) =>
   h('span', {}, [ t(`Hello, ${ name }!`) ])
 
 class Hello extends Component {
-  constructor() {
-    super('#hello')
-  }
   render({ name }) {
     return hello(name)
   }
 }
+
+mount(Hello, $('#helloContainer'), { name: 'John Doe' })
+
 ```
 
 > A component with lifecycle callbacks
@@ -31,24 +31,22 @@ class Hello extends Component {
 import { h, t, Component } from 'blocks'
 
 class Counter extends Component {
-  constructor() {
-    super('#counter')
-  }
-
   increase() {
-    this.setState({ counter: this.state.counter + 1 })
+    this.setState({ count: this.state.count + 1 })
   }
 
   decrease() {
-    this.setState({ counter: this.state.counter - 1 })
+    this.setState({ count: this.state.count - 1 })
   }
 
-  render({ counter }) {
+  render({ count }) {
     return h('span', {
       class: 'ribbon'
-    }, [ t(counter) ])
+    }, [ t(count) ])
   }
 }
+
+mount(Hello, $('#counterContainer'), { count: 42 })
 
 ```
 
@@ -59,7 +57,7 @@ Check out a [live exmaple](http://jsbin.com/faquhizoxi/edit?js,output) (hit `Run
 ```javascript
 import { h, t, Component } from 'blocks'
 
-const KEYS = {
+const ARROW_KEYS = {
   UP: 38,
   DOWN: 40
 }
@@ -78,19 +76,15 @@ const counter = (n = 0) =>
 
 const headsOrTails = () => Math.random() < .5
 
-class App extends Component {
-  constructor() {
-    super('#app')
-  }
-
+class CounterApp extends Component {
   onMount() {
     document.addEventListener('keyup', (e) => {
       switch(e.which) {
-        case KEYS.UP:
-          this.inc()
+        case ARROW_KEYS.UP:
+          this.increase()
           break
-        case KEYS.DOWN:
-          this.dec()
+        case ARROW_KEYS.DOWN:
+          this.decrease()
           break
       }
     })
@@ -106,12 +100,12 @@ class App extends Component {
     this.setState({ count: this.state.count + 1})
   }
 
-  tick() {
-    return headsOrTails() ? this.inc() : this.dec()
-  }
-
   decrease() {
     this.setState({ count: this.state.count - 1})    
+  }
+
+  tick() {
+    return headsOrTails() ? this.increase() : this.decrease()
   }
 
   render({ count }) {
@@ -122,4 +116,6 @@ class App extends Component {
     ])
   }
 }
+
+mount(CounterApp, $('#appContainer'), { count: 10 })
 ```
