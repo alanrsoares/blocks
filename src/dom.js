@@ -1,5 +1,5 @@
 export const $ = (q) => {
-  const els = document.querySelectorAll(q)
+  export const els = document.querySelectorAll(q)
   return els.length > 1 ? els : els[0]
 }
 
@@ -14,17 +14,16 @@ export const replace = (prev, next) =>
 export const remove = (e) => e.parentNode.removeChild(e)
 
 export const setAttrs = (el, attrs) => {
-  const set = (key) => {
+  const reducer = (e, key) => {
     const EVENT = /^on([A-Z]\w+)$/
     if (EVENT.test(key))
-      el.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key])
+      e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key])
     else
-      el.setAttribute(key, attrs[key])
+      e.setAttribute(key, attrs[key])
+    return e
   }
 
-  Object.keys(attrs).forEach(set)
-
-  return el
+  return Object.keys(attrs).reduce(reducer, el)
 }
 
 export const h = (tag, attrs = {}, children = []) =>
@@ -32,7 +31,16 @@ export const h = (tag, attrs = {}, children = []) =>
 
 export const t = (text) => document.createTextNode(text)
 
-const isFunction = (x) => typeof x === 'function'
+export const mount = (componentClass, target, state) => {
+  export const className = `${componentClass}`.match(/function (\w+)/)[1]
+  return new componentClass(`#${target.id}_${className}`).mount(target, state)
+}
+
+const isFunction = (x) =>
+  typeof x === 'function'
+
+const callIfExist = (f, context) =>
+  isFunction(f) && f.bind(context)()
 
 export class Component {
   constructor(selector) {
@@ -46,19 +54,21 @@ export class Component {
   }
 
   get renderedElement() {
-    return setAttrs(this.render(this.state), { id: this.selector.substr(1) })
+    return setAttrs(this.render(this.state), {
+      id: this.selector.substr(1)
+    })
   }
 
   mount(target, props = {}) {
     this.unmount()
     this.target = target
     this.state = { ...props }
-    if (isFunction(this.onMount)) { this.onMount() }
+    callIfExist(this.onMount, this)
     append(this.target, [this.renderedElement])
   }
 
   unmount() {
-    if (isFunction(this.onUnmount)) { this.onUnmount() }
+    callIfExist(this.onUnmount, this)
     if (this.self) { remove(this.self) }
   }
 
@@ -68,10 +78,9 @@ export class Component {
   }
 
   update() {
-    if (isFunction(this.onUpdate)) { this.onUpdate(this.state) }
-
+    callIfExist(this.onUpdate, this)
     if (this.self) {
-      replace(this.self, this.renderedElement)
+      this.mount(this.target, this.state)
     }
   }
 }
