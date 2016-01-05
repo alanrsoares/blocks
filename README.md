@@ -49,7 +49,7 @@ class Counter extends Component {
 
 > A slightly complex counter
 
-[live exmaple](http://jsbin.com/jedezeveni/5/edit?js,output)
+Check out a [live exmaple](http://jsbin.com/jedezeveni/5/edit?js,output) (hit `Run with JS`)
 
 ```javascript
 import { h, t, Component } from 'blocks';
