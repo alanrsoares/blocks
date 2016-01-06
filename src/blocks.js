@@ -25,7 +25,7 @@ export const append = (el, children) =>
     if (child instanceof HTMLElement)
       e.appendChild(withId(child))
     else
-      e.appendChild(withId(dom('span', {}, `${ child }`)))
+      e.appendChild(document.createTextNode(`${child}`))
     return e
   }, el)
 
