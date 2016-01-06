@@ -1,7 +1,6 @@
 'use strict';
 
 (function (global, factory) {
-  console.log(global);
   if (typeof define === "function" && define.amd) {
     define(['exports'], factory);
   } else if (typeof exports !== "undefined") {
@@ -13,7 +12,7 @@
     factory(mod.exports);
     global.blocks = mod.exports;
   }
-})(this, function (exports) {
+})(window, function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
