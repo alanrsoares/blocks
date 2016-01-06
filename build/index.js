@@ -121,4 +121,3 @@ var Component = exports.Component = (function () {
 
   return Component;
 })();
-
