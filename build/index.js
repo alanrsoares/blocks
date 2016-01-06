@@ -40,7 +40,7 @@ var append = exports.append = function append(el, children) {
       });
     };
 
-    if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', '' + child));
+    if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', {}, '' + child));
     return e;
   }, el);
 };

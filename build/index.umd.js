@@ -85,7 +85,7 @@
         });
       };
 
-      if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', '' + child));
+      if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', {}, '' + child));
       return e;
     }, el);
   };
