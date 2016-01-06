@@ -1,5 +1,5 @@
-export const $ = (q) => {
-  const els = document.querySelectorAll(q)
+export const $ = (query) => {
+  const els = document.querySelectorAll(query)
   return els.length > 1 ? els : els[0]
 }
 
