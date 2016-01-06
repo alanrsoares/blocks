@@ -69,8 +69,8 @@ const counter = (n = 0) =>
   h('div', {
     class: 'counter',
     style: `
-      color: ${ n > 0 ? '#3c3' : '#c33' }
-      background: ${ n > 0 ? '#cfc' : '#fcc' }
+      color: ${ n > 0 ? '#3c3' : '#c33' };
+      background: ${ n > 0 ? '#cfc' : '#fcc' };
     `
   }, [t(n)])
 
