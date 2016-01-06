@@ -52,7 +52,7 @@ mount(Hello, $('#counterContainer'), { count: 42 })
 
 > A slightly complex counter
 
-Check out a [live exmaple](http://jsbin.com/faquhizoxi/edit?js,output) (hit `Run with JS`)
+Check out a [live exmaple](http://jsbin.com/refucumezo/edit?js,output) (hit `Run with JS`)
 
 ```javascript
 import { h, t, Component } from 'blocks'
