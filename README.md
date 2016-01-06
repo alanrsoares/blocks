@@ -10,10 +10,10 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 > A simple component
 
 ```javascript
-import { $, mount, h, t, Component } from 'blocks'
+import { $, mount, dom, Component } from 'blocks'
 
 const hello = (name) =>
-  h('span', {}, [ t(`Hello, ${ name }!`) ])
+  dom('span', {}, [`Hello, ${ name }!`])
 
 class Hello extends Component {
   render({ name }) {
@@ -28,7 +28,7 @@ mount(Hello, $('#helloContainer'), { name: 'John Doe' })
 > A component with lifecycle callbacks
 
 ```javascript
-import { h, t, Component } from 'blocks'
+import { $, mount, dom, Component } from 'blocks'
 
 class Counter extends Component {
   increase() {
@@ -40,9 +40,9 @@ class Counter extends Component {
   }
 
   render({ count }) {
-    return h('span', {
+    return dom('span', {
       class: 'ribbon'
-    }, [ t(count) ])
+    }, [ count ])
   }
 }
 
@@ -55,7 +55,7 @@ mount(Hello, $('#counterContainer'), { count: 42 })
 Check out a [live exmaple](http://jsbin.com/refucumezo/edit?js,output) (hit `Run with JS`)
 
 ```javascript
-import { h, t, Component } from 'blocks'
+import { dom, Component } from 'blocks'
 
 const ARROW_KEYS = {
   UP: 38,
@@ -63,16 +63,16 @@ const ARROW_KEYS = {
 }
 
 const button = (label, onClick) =>
-  h('button', { onClick }, [t(label)])
+  dom('button', { onClick }, [ label ])
 
 const counter = (n = 0) =>
-  h('div', {
+  dom('div', {
     class: 'counter',
     style: `
       color: ${ n > 0 ? '#3c3' : '#c33' };
       background: ${ n > 0 ? '#cfc' : '#fcc' };
     `
-  }, [t(n)])
+  }, [ n ])
 
 const headsOrTails = () => Math.random() < .5
 
@@ -109,7 +109,7 @@ class CounterApp extends Component {
   }
 
   render({ count }) {
-    return h('div', { class: 'app' }, [
+    return dom('div', { class: 'app' }, [
       button('-', this.decrease.bind(this)),
       counter(count),
       button('+', this.increase.bind(this))

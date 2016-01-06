@@ -3,9 +3,16 @@ export const $ = (q) => {
   return els.length > 1 ? els : els[0]
 }
 
-export const append = (e, children) => {
-  children.forEach((child) => e.appendChild(child))
-  return e
+export const append = (el, children) => {
+  const reducer = (e, child) => {
+    if (!child instanceof HTMLElement)
+      e.appendChild(document.createTextNode(child))
+    else
+      e.appendChild(child)
+    return e
+  }
+
+  return children.reduce(reducer, el)
 }
 
 export const replace = (prev, next) =>
@@ -26,10 +33,8 @@ export const setAttrs = (el, attrs) => {
   return Object.keys(attrs).reduce(reducer, el)
 }
 
-export const h = (tag, attrs = {}, children = []) =>
+export const dom = (tag, attrs = {}, children = []) =>
   setAttrs(append(document.createElement(tag), children), attrs)
-
-export const t = (text) => document.createTextNode(text)
 
 export const mount = (componentClass, target, state) => {
   const className = `${componentClass}`.match(/function ([A-Z]\w+)/)[1]
