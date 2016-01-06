@@ -62,7 +62,11 @@
 
   var append = exports.append = function append(el, children) {
     var reducer = function reducer(e, child) {
-      if (!child instanceof HTMLElement) e.appendChild(document.createTextNode(child));else e.appendChild(child);
+      if (child instanceof HTMLElement) {
+        e.appendChild(child);
+      } else {
+        e.appendChild(document.createTextNode('' + child));
+      }
       return e;
     };
 

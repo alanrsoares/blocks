@@ -5,10 +5,11 @@ export const $ = (query) => {
 
 export const append = (el, children) => {
   const reducer = (e, child) => {
-    if (!child instanceof HTMLElement)
-      e.appendChild(document.createTextNode(child))
-    else
+    if (child instanceof HTMLElement) {
       e.appendChild(child)
+    } else {
+      e.appendChild(document.createTextNode(`${child}`))
+    }
     return e
   }
 
