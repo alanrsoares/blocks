@@ -3,36 +3,29 @@ export const $ = (query) => {
   return els.length > 1 ? els : els[0]
 }
 
-export const append = (el, children) => {
-  const reducer = (e, child) => {
-    if (child instanceof HTMLElement) {
-      e.appendChild(child)
-    } else {
-      e.appendChild(document.createTextNode(`${child}`))
-    }
-    return e
-  }
-
-  return children.reduce(reducer, el)
-}
-
 export const replace = (prev, next) =>
   prev.parentNode.replaceChild(next, prev, next)
 
 export const remove = (e) => e.parentNode.removeChild(e)
 
-export const setAttrs = (el, attrs) => {
-  const reducer = (e, key) => {
+export const append = (el, children) =>
+  children.reduce((e, child) => {
+    if (child instanceof HTMLElement) {
+      e.appendChild(child)
+    else
+      e.appendChild(document.createTextNode(`${child}`))
+    return e
+  }, el)
+
+export const setAttrs = (el, attrs) =>
+  Object.keys(attrs).reduce((e, key) => {
     const EVENT = /^on([A-Z]\w+)$/
     if (EVENT.test(key))
       e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key])
     else
       e.setAttribute(key, attrs[key])
     return e
-  }
-
-  return Object.keys(attrs).reduce(reducer, el)
-}
+  }, el)
 
 export const dom = (tag, attrs = {}, ...children) =>
   setAttrs(append(document.createElement(tag), children), attrs)
