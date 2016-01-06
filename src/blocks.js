@@ -10,7 +10,7 @@ export const remove = (e) => e.parentNode.removeChild(e)
 
 export const append = (el, children) =>
   children.reduce((e, child) => {
-    if (child instanceof HTMLElement) {
+    if (child instanceof HTMLElement)
       e.appendChild(child)
     else
       e.appendChild(document.createTextNode(`${child}`))

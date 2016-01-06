@@ -60,19 +60,6 @@
     return els.length > 1 ? els : els[0];
   };
 
-  var append = exports.append = function append(el, children) {
-    var reducer = function reducer(e, child) {
-      if (child instanceof HTMLElement) {
-        e.appendChild(child);
-      } else {
-        e.appendChild(document.createTextNode('' + child));
-      }
-      return e;
-    };
-
-    return children.reduce(reducer, el);
-  };
-
   var replace = exports.replace = function replace(prev, next) {
     return prev.parentNode.replaceChild(next, prev, next);
   };
@@ -81,14 +68,19 @@
     return e.parentNode.removeChild(e);
   };
 
+  var append = exports.append = function append(el, children) {
+    return children.reduce(function (e, child) {
+      if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
+      return e;
+    }, el);
+  };
+
   var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
-    var reducer = function reducer(e, key) {
+    return Object.keys(attrs).reduce(function (e, key) {
       var EVENT = /^on([A-Z]\w+)$/;
       if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);
       return e;
-    };
-
-    return Object.keys(attrs).reduce(reducer, el);
+    }, el);
   };
 
   var dom = exports.dom = function dom(tag) {

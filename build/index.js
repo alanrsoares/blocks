@@ -15,15 +15,6 @@ var $ = exports.$ = function $(query) {
   return els.length > 1 ? els : els[0];
 };
 
-var append = exports.append = function append(el, children) {
-  var reducer = function reducer(e, child) {
-    if (!child instanceof HTMLElement) e.appendChild(document.createTextNode(child));else e.appendChild(child);
-    return e;
-  };
-
-  return children.reduce(reducer, el);
-};
-
 var replace = exports.replace = function replace(prev, next) {
   return prev.parentNode.replaceChild(next, prev, next);
 };
@@ -32,19 +23,27 @@ var remove = exports.remove = function remove(e) {
   return e.parentNode.removeChild(e);
 };
 
+var append = exports.append = function append(el, children) {
+  return children.reduce(function (e, child) {
+    if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
+    return e;
+  }, el);
+};
+
 var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
-  var reducer = function reducer(e, key) {
+  return Object.keys(attrs).reduce(function (e, key) {
     var EVENT = /^on([A-Z]\w+)$/;
     if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);
     return e;
-  };
-
-  return Object.keys(attrs).reduce(reducer, el);
+  }, el);
 };
 
 var dom = exports.dom = function dom(tag) {
+  for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    children[_key - 2] = arguments[_key];
+  }
+
   var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  var children = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
   return setAttrs(append(document.createElement(tag), children), attrs);
 };
 
