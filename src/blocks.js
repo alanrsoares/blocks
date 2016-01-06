@@ -34,7 +34,7 @@ export const setAttrs = (el, attrs) => {
   return Object.keys(attrs).reduce(reducer, el)
 }
 
-export const dom = (tag, attrs = {}, children = []) =>
+export const dom = (tag, attrs = {}, ...children) =>
   setAttrs(append(document.createElement(tag), children), attrs)
 
 export const mount = (componentClass, target, state) => {

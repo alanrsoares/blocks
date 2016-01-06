@@ -92,8 +92,11 @@
   };
 
   var dom = exports.dom = function dom(tag) {
+    for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      children[_key - 2] = arguments[_key];
+    }
+
     var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-    var children = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
     return setAttrs(append(document.createElement(tag), children), attrs);
   };
 

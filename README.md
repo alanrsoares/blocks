@@ -13,7 +13,7 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 import { $, mount, dom, Component } from 'blocks'
 
 const hello = (name) =>
-  dom('span', {}, [`Hello, ${ name }!`])
+  dom('span', {}, `Hello, ${ name }!`)
 
 class Hello extends Component {
   render({ name }) {
@@ -63,7 +63,7 @@ const ARROW_KEYS = {
 }
 
 const button = (label, onClick) =>
-  dom('button', { onClick }, [ label ])
+  dom('button', { onClick }, label)
 
 const counter = (n = 0) =>
   dom('div', {
@@ -72,7 +72,7 @@ const counter = (n = 0) =>
       color: ${ n > 0 ? '#3c3' : '#c33' };
       background: ${ n > 0 ? '#cfc' : '#fcc' };
     `
-  }, [ n ])
+  }, n)
 
 const headsOrTails = () => Math.random() < .5
 
@@ -109,11 +109,11 @@ class CounterApp extends Component {
   }
 
   render({ count }) {
-    return dom('div', { class: 'app' }, [
+    return dom('div', { class: 'app' },
       button('-', this.decrease.bind(this)),
       counter(count),
       button('+', this.increase.bind(this))
-    ])
+    )
   }
 }
 
