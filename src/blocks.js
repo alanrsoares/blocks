@@ -20,12 +20,15 @@ export const setAttrs = (el, attrs) =>
 
 export const append = (el, children) =>
   children.reduce((e, child, i) => {
-    const id = `${ e['data-blocks-id'] || 1 }.${ i }`
-    const withId = (x) => setAttrs(x, { 'data-blocks-id':  id })
+    const id = e.attributes['data-blocks-id']
+    const withId = (x) => setAttrs(x, {
+      'data-blocks-id': `${ id ? id.value: 1 }.${ i }`
+    })
+
     if (child instanceof HTMLElement)
       e.appendChild(withId(child))
     else
-      e.appendChild(document.createTextNode(`${child}`))
+      e.appendChild(dom('span', `${child}`))
     return e
   }, el)
 

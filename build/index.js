@@ -33,11 +33,14 @@ var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
 
 var append = exports.append = function append(el, children) {
   return children.reduce(function (e, child, i) {
-    var id = (e['data-blocks-id'] || 1) + '.' + i;
+    var id = e.attributes['data-blocks-id'];
     var withId = function withId(x) {
-      return setAttrs(x, { 'data-blocks-id': id });
+      return setAttrs(x, {
+        'data-blocks-id': (id ? id.value : 1) + '.' + i
+      });
     };
-    if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(document.createTextNode('' + child));
+
+    if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', '' + child));
     return e;
   }, el);
 };
