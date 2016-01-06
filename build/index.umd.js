@@ -68,17 +68,21 @@
     return e.parentNode.removeChild(e);
   };
 
-  var append = exports.append = function append(el, children) {
-    return children.reduce(function (e, child) {
-      if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
-      return e;
-    }, el);
-  };
-
   var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
     return Object.keys(attrs).reduce(function (e, key) {
       var EVENT = /^on([A-Z]\w+)$/;
       if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);
+      return e;
+    }, el);
+  };
+
+  var append = exports.append = function append(el, children) {
+    return children.reduce(function (e, child, i) {
+      var id = (e['data-blocks-id'] || 1) + '.' + i;
+      var withId = function withId(x) {
+        return setAttrs(x, { 'data-blocks-id': id });
+      };
+      if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(withId(dom('span', {}, '' + child)));
       return e;
     }, el);
   };

@@ -8,15 +8,6 @@ export const replace = (prev, next) =>
 
 export const remove = (e) => e.parentNode.removeChild(e)
 
-export const append = (el, children) =>
-  children.reduce((e, child) => {
-    if (child instanceof HTMLElement)
-      e.appendChild(child)
-    else
-      e.appendChild(document.createTextNode(`${child}`))
-    return e
-  }, el)
-
 export const setAttrs = (el, attrs) =>
   Object.keys(attrs).reduce((e, key) => {
     const EVENT = /^on([A-Z]\w+)$/
@@ -24,6 +15,17 @@ export const setAttrs = (el, attrs) =>
       e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key])
     else
       e.setAttribute(key, attrs[key])
+    return e
+  }, el)
+
+export const append = (el, children) =>
+  children.reduce((e, child, i) => {
+    const id = `${ e['data-blocks-id'] || 1 }.${ i }`
+    const withId = (x) => setAttrs(x, { 'data-blocks-id':  id })
+    if (child instanceof HTMLElement)
+      e.appendChild(withId(child))
+    else
+      e.appendChild(withId(dom('span', {}, `${ child }`)))
     return e
   }, el)
 
