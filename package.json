@@ -2,7 +2,7 @@
   "name": "blocks",
   "version": "0.1.0",
   "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "babel src/blocks.js -o build/index.js",
     "build-bower": "babel --plugins transform-es2015-modules-umd src/blocks.js -o build/index.umd.js"
