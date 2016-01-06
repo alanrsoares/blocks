@@ -22,5 +22,10 @@
     "url": "https://github.com/alanrsoares/blocks/issues"
   },
   "homepage": "https://github.com/alanrsoares/blocks#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-core": "^6.3.26",
+    "babel-plugin-transform-es2015-modules-umd": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-2": "^6.3.13"
+  }
 }
