@@ -1,6 +1,7 @@
 'use strict';
 
 (function (global, factory) {
+  console.log(global);
   if (typeof define === "function" && define.amd) {
     define(['exports'], factory);
   } else if (typeof exports !== "undefined") {
