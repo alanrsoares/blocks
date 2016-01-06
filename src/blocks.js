@@ -32,7 +32,7 @@ export const dom = (tag, attrs = {}, ...children) =>
 
 export const mount = (componentClass, target, state) => {
   const className = `${componentClass}`.match(/function ([A-Z]\w+)/)[1]
-  return new componentClass(`#${target.id}_${className}`).mount(target, state)
+  return new componentClass(`${target.id}_${className}`).mount(target, state)
 }
 
 const isFunction = (x) =>
@@ -42,18 +42,18 @@ const callIfExist = (f, context) =>
   isFunction(f) && f.bind(context)()
 
 export class Component {
-  constructor(selector) {
-    this.selector = selector
+  constructor(id) {
+    this.id = `[data-blocks-id=${id}]`
     this.state = {}
   }
 
   get self() {
-    return $(this.selector)
+    return $(this.id)
   }
 
   get renderedElement() {
     return setAttrs(this.render(this.state), {
-      id: this.selector.substr(1)
+      'data-blocks-id': this.id
     })
   }
 
