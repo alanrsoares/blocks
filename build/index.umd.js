@@ -12,7 +12,7 @@
     factory(mod.exports);
     global.blocks = mod.exports;
   }
-})(window, function (exports) {
+})(this, function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
