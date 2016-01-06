@@ -49,7 +49,7 @@ var dom = exports.dom = function dom(tag) {
 
 var mount = exports.mount = function mount(componentClass, target, state) {
   var className = ('' + componentClass).match(/function ([A-Z]\w+)/)[1];
-  return new componentClass('#' + target.id + '_' + className).mount(target, state);
+  return new componentClass(target.id + '_' + className).mount(target, state);
 };
 
 var isFunction = function isFunction(x) {
@@ -61,10 +61,10 @@ var callIfExist = function callIfExist(f, context) {
 };
 
 var Component = exports.Component = (function () {
-  function Component(selector) {
+  function Component(id) {
     _classCallCheck(this, Component);
 
-    this.selector = selector;
+    this.id = '[data-blocks-id=' + id + ']';
     this.state = {};
   }
 
@@ -105,13 +105,13 @@ var Component = exports.Component = (function () {
   }, {
     key: 'self',
     get: function get() {
-      return $(this.selector);
+      return $(this.id);
     }
   }, {
     key: 'renderedElement',
     get: function get() {
       return setAttrs(this.render(this.state), {
-        id: this.selector.substr(1)
+        'data-blocks-id': this.id
       });
     }
   }]);
