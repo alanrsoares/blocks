@@ -43,12 +43,12 @@ const callIfExist = (f, context) =>
 
 export class Component {
   constructor(id) {
-    this.id = `[data-blocks-id=${id}]`
+    this.id = id
     this.state = {}
   }
 
   get self() {
-    return $(this.id)
+    return $(`[data-blocks-id=${this.id}]`)
   }
 
   get renderedElement() {

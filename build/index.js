@@ -64,7 +64,7 @@ var Component = exports.Component = (function () {
   function Component(id) {
     _classCallCheck(this, Component);
 
-    this.id = '[data-blocks-id=' + id + ']';
+    this.id = id;
     this.state = {};
   }
 
@@ -105,7 +105,7 @@ var Component = exports.Component = (function () {
   }, {
     key: 'self',
     get: function get() {
-      return $(this.id);
+      return $('[data-blocks-id=' + this.id + ']');
     }
   }, {
     key: 'renderedElement',
