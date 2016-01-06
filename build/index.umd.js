@@ -55,16 +55,18 @@
     };
   })();
 
-  var $ = exports.$ = function $(q) {
-    var els = document.querySelectorAll(q);
+  var $ = exports.$ = function $(query) {
+    var els = document.querySelectorAll(query);
     return els.length > 1 ? els : els[0];
   };
 
-  var append = exports.append = function append(e, children) {
-    children.forEach(function (child) {
-      return e.appendChild(child);
-    });
-    return e;
+  var append = exports.append = function append(el, children) {
+    var reducer = function reducer(e, child) {
+      if (!child instanceof HTMLElement) e.appendChild(document.createTextNode(child));else e.appendChild(child);
+      return e;
+    };
+
+    return children.reduce(reducer, el);
   };
 
   var replace = exports.replace = function replace(prev, next) {
@@ -85,14 +87,10 @@
     return Object.keys(attrs).reduce(reducer, el);
   };
 
-  var h = exports.h = function h(tag) {
+  var dom = exports.dom = function dom(tag) {
     var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     var children = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
     return setAttrs(append(document.createElement(tag), children), attrs);
-  };
-
-  var t = exports.t = function t(text) {
-    return document.createTextNode(text);
   };
 
   var mount = exports.mount = function mount(componentClass, target, state) {
