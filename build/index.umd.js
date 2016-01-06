@@ -77,15 +77,8 @@
   };
 
   var append = exports.append = function append(el, children) {
-    return children.reduce(function (e, child, i) {
-      var id = e.attributes['data-blocks-id'];
-      var withId = function withId(x) {
-        return setAttrs(x, {
-          'data-blocks-id': (id ? id.value : 1) + '.' + i
-        });
-      };
-
-      if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(dom('span', {}, document.createTextNode('' + child)));
+    return children.reduce(function (e, child) {
+      if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
       return e;
     }, el);
   };
