@@ -21,7 +21,7 @@ export const setAttrs = (el, attrs) =>
 export const append = (el, children) =>
   children.reduce((e, child, i) => {
     const id = (x) => x.getAttribute('data-blocks-id')
-    const withId = (x) => id(x) ? x : setAttrs(x, { 'data-blocks-id': `${id(el) || _1}.${i}` })
+    const withId = (x) => id(x) ? x : setAttrs(x, { 'data-blocks-id': `${id(el) || '_1'}.${i}` })
 
     if (child instanceof HTMLElement)
       e.appendChild(child)
