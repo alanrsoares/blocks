@@ -85,7 +85,7 @@
         return id(x) ? x : setAttrs(x, { 'data-blocks-id': (id(el) || '_1') + '.' + i });
       };
 
-      if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
+      if (child instanceof HTMLElement) e.appendChild(withId(child));else e.appendChild(document.createTextNode('' + child));
       return e;
     }, el);
   };
