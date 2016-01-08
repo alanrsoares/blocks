@@ -32,7 +32,14 @@ var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
 };
 
 var append = exports.append = function append(el, children) {
-  return children.reduce(function (e, child) {
+  return children.reduce(function (e, child, i) {
+    var id = function id(x) {
+      return x.getAttribute('data-blocks-id');
+    };
+    var withId = function withId(x) {
+      return id(x) ? x : setAttrs(x, { 'data-blocks-id': (id(el) || _1) + '.' + i });
+    };
+
     if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
     return e;
   }, el);
