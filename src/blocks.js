@@ -38,7 +38,7 @@ const callIfExist = (f, context) =>
 
 export const dom = (tag, attrs = {}, ...children) => {
   const e = (typeof tag === 'function')
-    ? new tag(className(tag), attrs, ...children)
+    ? new tag(className(tag), attrs, ...children).render()
     : document.createElement(tag)
 
   return setAttrs(append(e, children), attrs)
@@ -46,7 +46,6 @@ export const dom = (tag, attrs = {}, ...children) => {
 
 export const mount = (componentClass, target, state) =>
   new componentClass(`${target.id + className(componentClass)}`, state).mount(target)
-
 
 export class Component {
   constructor(id, state, ...children) {
@@ -63,6 +62,10 @@ export class Component {
     return setAttrs(this.render(this.state), {
       'data-blocks-id': this.id
     })
+  }
+
+  valueOf() {
+    return this.renderedElement
   }
 
   setState(partial = {}) {
