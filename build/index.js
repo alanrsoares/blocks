@@ -11,8 +11,9 @@ Object.defineProperty(exports, "__esModule", {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var $ = exports.$ = function $(query) {
-  var els = document.querySelectorAll(query);
-  return els.length > 1 ? els : els[0];
+  return (function (els) {
+    return els.length > 1 ? els : els[0];
+  })(document.querySelectorAll(query));
 };
 
 var replace = exports.replace = function replace(prev, next) {
@@ -45,18 +46,8 @@ var append = exports.append = function append(el, children) {
   }, el);
 };
 
-var dom = exports.dom = function dom(tag) {
-  for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    children[_key - 2] = arguments[_key];
-  }
-
-  var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  return setAttrs(append(document.createElement(tag), children), attrs);
-};
-
-var mount = exports.mount = function mount(componentClass, target, state) {
-  var className = ('' + componentClass).match(/function ([A-Z]\w+)/)[1];
-  return new componentClass(target.id + '_' + className).mount(target, state);
+var className = function className(componentClass) {
+  return ('_' + componentClass).match(/function ([A-Z]\w+)/)[1];
 };
 
 var isFunction = function isFunction(x) {
@@ -67,15 +58,42 @@ var callIfExist = function callIfExist(f, context) {
   return isFunction(f) && f.bind(context)();
 };
 
+var dom = exports.dom = function dom(tag) {
+  for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    children[_key - 2] = arguments[_key];
+  }
+
+  var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs], children)))().render() : document.createElement(tag);
+
+  return setAttrs(append(e, children), attrs);
+};
+
+var mount = exports.mount = function mount(componentClass, target, state) {
+  return new componentClass('' + (target.id + className(componentClass)), state).mount(target);
+};
+
 var Component = exports.Component = (function () {
-  function Component(id) {
+  function Component(id, state) {
     _classCallCheck(this, Component);
 
     this.id = id;
-    this.state = {};
+    this.state = _extends({}, state);
+
+    for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+      children[_key2 - 2] = arguments[_key2];
+    }
+
+    this.children = children;
   }
 
   _createClass(Component, [{
+    key: 'valueOf',
+    value: function valueOf() {
+      return this.renderedElement;
+    }
+  }, {
     key: 'setState',
     value: function setState() {
       var partial = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -86,10 +104,7 @@ var Component = exports.Component = (function () {
   }, {
     key: 'mount',
     value: function mount(target) {
-      var props = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
       this.unmount();
-      this.state = _extends({}, props);
       callIfExist(this.onMount, this);
       append(target, [this.renderedElement]);
     }
