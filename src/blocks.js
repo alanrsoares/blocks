@@ -1,12 +1,10 @@
-export const $ = (query) => {
-  const els = document.querySelectorAll(query)
-  return els.length > 1 ? els : els[0]
-}
+export const $ = query =>
+  (els => els.length > 1 ? els : els[0])(document.querySelectorAll(query))
 
 export const replace = (prev, next) =>
   prev.parentNode.replaceChild(next, prev, next)
 
-export const remove = (e) => e.parentNode.removeChild(e)
+export const remove = e => e.parentNode.removeChild(e)
 
 export const setAttrs = (el, attrs) =>
   Object.keys(attrs).reduce((e, key) => {
@@ -30,24 +28,31 @@ export const append = (el, children) =>
     return e
   }, el)
 
-export const dom = (tag, attrs = {}, ...children) =>
-  setAttrs(append(document.createElement(tag), children), attrs)
+const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
 
-export const mount = (componentClass, target, state) => {
-  const className = `${componentClass}`.match(/function ([A-Z]\w+)/)[1]
-  return new componentClass(`${target.id}_${className}`).mount(target, state)
-}
-
-const isFunction = (x) =>
+const isFunction = x =>
   typeof x === 'function'
 
 const callIfExist = (f, context) =>
   isFunction(f) && f.bind(context)()
 
+export const dom = (tag, attrs = {}, ...children) => {
+  const e = (typeof tag === 'function')
+    ? new tag(className(tag), attrs, ...children)
+    : document.createElement(tag)
+
+  return setAttrs(append(e, children), attrs)
+}
+
+export const mount = (componentClass, target, state) =>
+  new componentClass(`${target.id + className(componentClass)}`, state).mount(target)
+
+
 export class Component {
-  constructor(id) {
+  constructor(id, state, ...children) {
     this.id = id
-    this.state = {}
+    this.state = { ...state }
+    this.children = children
   }
 
   get self() {
@@ -65,9 +70,8 @@ export class Component {
     this.update()
   }
 
-  mount(target, props = {}) {
+  mount(target) {
     this.unmount()
-    this.state = { ...props }
     callIfExist(this.onMount, this)
     append(target, [this.renderedElement])
   }
