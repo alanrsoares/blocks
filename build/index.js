@@ -10,6 +10,8 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var $ = exports.$ = function $(query) {
   return (function (els) {
     return els.length > 1 ? els : els[0];
@@ -65,7 +67,11 @@ var dom = exports.dom = function dom(tag) {
 
   var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs], children)))().render() : document.createElement(tag);
+  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs], _toConsumableArray(children))))().render() : document.createElement(tag);
+
+  if (children.length === 1 && Array.isArray(children[0])) {
+    children = children[0];
+  }
 
   return setAttrs(append(e, children), attrs);
 };
