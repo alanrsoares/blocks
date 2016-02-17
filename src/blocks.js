@@ -41,6 +41,10 @@ export const dom = (tag, attrs = {}, ...children) => {
     ? new tag(className(tag), attrs, ...children).render()
     : document.createElement(tag)
 
+  if (children.length === 1 && Array.isArray(children[0])) {
+    children = children[0]
+  }
+
   return setAttrs(append(e, children), attrs)
 }
 
