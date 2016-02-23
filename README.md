@@ -5,6 +5,10 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 * standard
 * pure ES2015
 
+## Installation
+
+> npm i --save blocksjs
+
 ## Examples
 
 > A simple component
