@@ -36,9 +36,9 @@ const isFunction = x =>
 const callIfExist = (f, context) =>
   isFunction(f) && f.bind(context)()
 
-export const dom = (tag, attrs = {}, ...children) => {
+export const dom = (tag, attrs, ...children) => {
   const e = (typeof tag === 'function')
-    ? new tag(className(tag), attrs, ...children).render()
+    ? new tag(className(tag), attrs || {}, ...children).render()
     : document.createElement(tag)
 
   if (children.length === 1 && Array.isArray(children[0])) {

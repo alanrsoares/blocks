@@ -115,14 +115,12 @@
     return isFunction(f) && f.bind(context)();
   };
 
-  var dom = exports.dom = function dom(tag) {
+  var dom = exports.dom = function dom(tag, attrs) {
     for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       children[_key - 2] = arguments[_key];
     }
 
-    var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs], _toConsumableArray(children))))().render() : document.createElement(tag);
+    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().render() : document.createElement(tag);
 
     if (children.length === 1 && Array.isArray(children[0])) {
       children = children[0];
