@@ -1,5 +1,5 @@
 {
-  "name": "blocks",
+  "name": "blocksjs",
   "version": "0.1.0",
   "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
   "main": "build/index.js",
