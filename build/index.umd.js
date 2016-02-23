@@ -81,7 +81,8 @@
     return e.parentNode.removeChild(e);
   };
 
-  var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
+  var setAttrs = exports.setAttrs = function setAttrs(el) {
+    var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     return Object.keys(attrs).reduce(function (e, key) {
       var EVENT = /^on([A-Z]\w+)$/;
       if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);

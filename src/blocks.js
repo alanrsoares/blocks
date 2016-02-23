@@ -6,7 +6,7 @@ export const replace = (prev, next) =>
 
 export const remove = e => e.parentNode.removeChild(e)
 
-export const setAttrs = (el, attrs) =>
+export const setAttrs = (el, attrs = {}) =>
   Object.keys(attrs).reduce((e, key) => {
     const EVENT = /^on([A-Z]\w+)$/
     if (EVENT.test(key))
