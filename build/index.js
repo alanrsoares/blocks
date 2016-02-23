@@ -26,9 +26,8 @@ var remove = exports.remove = function remove(e) {
   return e.parentNode.removeChild(e);
 };
 
-var setAttrs = exports.setAttrs = function setAttrs(el) {
-  var attrs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  return Object.keys(attrs).reduce(function (e, key) {
+var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
+  return Object.keys(attrs || {}).reduce(function (e, key) {
     var EVENT = /^on([A-Z]\w+)$/;
     if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);
     return e;
@@ -66,7 +65,7 @@ var dom = exports.dom = function dom(tag, attrs) {
     children[_key - 2] = arguments[_key];
   }
 
-  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs ? attrs : {}], _toConsumableArray(children))))().render() : document.createElement(tag);
+  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().render() : document.createElement(tag);
 
   if (children.length === 1 && Array.isArray(children[0])) {
     children = children[0];

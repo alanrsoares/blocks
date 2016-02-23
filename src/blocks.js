@@ -6,8 +6,8 @@ export const replace = (prev, next) =>
 
 export const remove = e => e.parentNode.removeChild(e)
 
-export const setAttrs = (el, attrs = {}) =>
-  Object.keys(attrs).reduce((e, key) => {
+export const setAttrs = (el, attrs) =>
+  Object.keys(attrs || {}).reduce((e, key) => {
     const EVENT = /^on([A-Z]\w+)$/
     if (EVENT.test(key))
       e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key])
@@ -38,7 +38,7 @@ const callIfExist = (f, context) =>
 
 export const dom = (tag, attrs, ...children) => {
   const e = (typeof tag === 'function')
-    ? new tag(className(tag), (attrs ? attrs : {}), ...children).render()
+    ? new tag(className(tag), (attrs || {}), ...children).render()
     : document.createElement(tag)
 
   if (children.length === 1 && Array.isArray(children[0])) {
