@@ -38,7 +38,7 @@ const callIfExist = (f, context) =>
 
 export const dom = (tag, attrs, ...children) => {
   const e = (typeof tag === 'function')
-    ? new tag(className(tag), attrs || {}, ...children).render()
+    ? new tag(className(tag), (attrs ? attrs : {}), ...children).render()
     : document.createElement(tag)
 
   if (children.length === 1 && Array.isArray(children[0])) {

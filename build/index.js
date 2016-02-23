@@ -65,7 +65,7 @@ var dom = exports.dom = function dom(tag, attrs) {
     children[_key - 2] = arguments[_key];
   }
 
-  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().render() : document.createElement(tag);
+  var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs ? attrs : {}], _toConsumableArray(children))))().render() : document.createElement(tag);
 
   if (children.length === 1 && Array.isArray(children[0])) {
     children = children[0];
