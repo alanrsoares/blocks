@@ -1,6 +1,10 @@
 # blocks
 Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
+## Features
+
+* react-like
+* jsx compatible
 * minimal
 * standard
 * pure ES2015
