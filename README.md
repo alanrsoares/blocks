@@ -23,7 +23,7 @@ $ npm i --save blocksjs
 import { $, mount, dom, Component } from 'blocks'
 
 const hello = (name) =>
-  dom('span', {}, `Hello, ${ name }!`)
+  dom('span', null, `Hello, ${ name }!`)
 
 class Hello extends Component {
   render({ name }) {
@@ -44,9 +44,9 @@ npm i --save-dev babel-plugin-transform-jsx
 ```
 
 .babelrc
-```
+```json
 {
-  "presets": ["es2015", ...],
+  "presets": ["es2015"],
   "plugins": [
     ["transform-react-jsx", {
       "pragma": "dom"
@@ -58,12 +58,13 @@ npm i --save-dev babel-plugin-transform-jsx
 ```javascript
 import { $, mount, dom, Component } from 'blocks'
 
-const hello = (name) =>
-  dom('span', {}, `Hello, ${ name }!`)
-
 class Hello extends Component {
   render({ name }) {
-    return hello(name)
+    return (
+      <span>
+        Hello, {name}!
+      </span>
+    )
   }
 }
 
