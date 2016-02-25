@@ -12,7 +12,7 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 ## Installation
 
 ```
-npm i --save blocksjs
+$ npm i --save blocksjs
 ```
 
 ## Examples
