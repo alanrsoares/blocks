@@ -35,6 +35,42 @@ mount(Hello, $('#helloContainer'), { name: 'John Doe' })
 
 ```
 
+> A simple component (jsx enabled)
+
+
+Enable jsx
+```
+npm i --save-dev babel-plugin-transform-jsx
+```
+
+.babelrc
+```
+{
+  "presets": ["es2015", ...],
+  "plugins": [
+    ["transform-react-jsx", {
+      "pragma": "dom"
+    }]
+  ]
+}
+```
+
+```javascript
+import { $, mount, dom, Component } from 'blocks'
+
+const hello = (name) =>
+  dom('span', {}, `Hello, ${ name }!`)
+
+class Hello extends Component {
+  render({ name }) {
+    return hello(name)
+  }
+}
+
+mount(Hello, $('#helloContainer'), { name: 'John Doe' })
+
+```
+
 > A component with lifecycle callbacks
 
 ```javascript
