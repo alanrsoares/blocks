@@ -1,0 +1,52 @@
+* {
+  font-family: Helvetica, Arial, Sans-Serif
+}
+
+body {
+  background-color: #FFF;
+}
+
+.app {
+  border: solid 3px #F0F0F0;
+  border-radius: 5px;
+  width: 540px
+}
+
+.header {
+  margin: 3px;
+  height: 35px;
+  font-weight: bold;
+}
+
+.title {
+  margin: 10px;
+}
+
+.number {
+  display: inline-block;
+  position: relative;
+  top: -30px;
+  right: -500px;
+  color: #666;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.grid {
+  margin: 6px;
+  border: solid 8px #F0F0F0;
+  border-radius: 5px;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 16px;
+  height: 16px;
+}
