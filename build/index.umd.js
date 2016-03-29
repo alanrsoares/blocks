@@ -16,7 +16,6 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.dom = dom;
   exports.h = h;
   exports.render = render;
 
@@ -159,25 +158,11 @@
     };
   };
 
-  function dom(tag, attrs) {
-    for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-      children[_key - 2] = arguments[_key];
-    }
-
-    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().render() : document.createElement(tag);
-
-    if (children.length === 1 && Array.isArray(children[0])) {
-      children = children[0];
-    }
-
-    return setAttrs(append(e, children), attrs);
-  }
-
   function h(tag, attrs) {
     var _attrs = _extends({}, attrs, _defineProperty({}, _ID, '1'));
 
-    for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-      children[_key2 - 2] = arguments[_key2];
+    for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      children[_key - 2] = arguments[_key];
     }
 
     return {
@@ -210,8 +195,8 @@
       this.props = _extends({}, props);
       this.state = {};
 
-      for (var _len3 = arguments.length, children = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-        children[_key3 - 2] = arguments[_key3];
+      for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        children[_key2 - 2] = arguments[_key2];
       }
 
       this.children = children;
