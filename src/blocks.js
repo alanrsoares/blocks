@@ -58,18 +58,6 @@ const child = attrs => (el, i) => {
   }
 }
 
-export function dom (tag, attrs, ...children) {
-  const e = (typeof tag === 'function')
-    ? new tag(className(tag), (attrs || {}), ...children).render()
-    : document.createElement(tag)
-
-  if (children.length === 1 && Array.isArray(children[0])) {
-    children = children[0]
-  }
-
-  return setAttrs(append(e, children), attrs)
-}
-
 export function h (tag, attrs, ...children) {
   const _attrs = { ...attrs, [_ID]: '1' }
 
