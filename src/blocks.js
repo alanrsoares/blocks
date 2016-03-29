@@ -97,7 +97,7 @@ export class Component {
   }
 
   get renderedElement () {
-    const e = h('div', { [_ID]: this.props[_ID] }, [this.render(this.props)])
+    const e = h('div', { [_ID]: `${this.id}${this.props[_ID]}` }, [this.render(this.props)])
     return render(e.children[0])
   }
 
