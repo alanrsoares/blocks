@@ -4,8 +4,8 @@
   "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel src/blocks.js -o build/index.js",
-    "build-bower": "babel --plugins transform-es2015-modules-umd src/blocks.js -o build/index.umd.js"
+    "dist": "babel src/blocks.js -o build/index.js",
+    "dist-umd": "babel --plugins transform-es2015-modules-umd src/blocks.js -o build/index.umd.js"
   },
   "repository": {
     "type": "git",

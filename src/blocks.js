@@ -16,17 +16,15 @@ export const setAttrs = (el, attrs) =>
     return e
   }, el)
 
-export const append = (el, children) =>
-  children.reduce((e, child, i) => {
-    const id = x => x.getAttribute('data-blocks-id')
-    const withId = x => id(x) ? x : setAttrs(x, { 'data-blocks-id': `${id(el) || '_1'}.${i}` })
-
+export const append = (el, children) => {
+  return children.reduce((e, child, i) => {
     if (child instanceof HTMLElement)
-      e.appendChild(withId(child))
+      e.appendChild(child)
     else
       e.appendChild(document.createTextNode(`${child}`))
     return e
   }, el)
+}
 
 const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
 
@@ -63,9 +61,7 @@ export class Component {
   }
 
   get renderedElement() {
-    return setAttrs(this.render(this.state), {
-      'data-blocks-id': this.id
-    })
+    return this.render(this.state)
   }
 
   valueOf() {
