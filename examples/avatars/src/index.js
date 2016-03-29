@@ -16,7 +16,7 @@ class GithubAvatar extends Component {
   render() {
     return (
       <div class='grid'>
-        {this.renderRows(this.state.grid)}
+        {this.renderRows(this.props.grid)}
       </div>
     )
   }
@@ -33,7 +33,7 @@ class GithubAvatar extends Component {
 
   renderCell(cell) {
     const style = `
-      background-color: ${ cell ? this.state.color : '#F0F0F0' }
+      background-color: ${ cell ? this.props.color : '#F0F0F0' }
     `
     return (
       <div
@@ -53,7 +53,7 @@ const makeAvatar = () => (
 
 class App extends Component {
   render() {
-    const { users } = this.state
+    const { users } = this.props
     return (
       <div class='app'>
         <div class='header'>

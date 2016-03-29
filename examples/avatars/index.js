@@ -18,11 +18,6 @@ var dom = _blocks.dom;
 var setAttrs = _blocks.setAttrs;
 var append = _blocks.append;
 
-// enable jsx resolution
-
-var React = {
-  createElement: dom
-};
 
 var headsOrTails = function headsOrTails() {
   return Math.random() < .5;
@@ -71,7 +66,7 @@ var GithubAvatar = function (_Component) {
       return dom(
         'div',
         { 'class': 'grid' },
-        this.renderRows(this.state.grid)
+        this.renderRows(this.props.grid)
       );
     }
   }, {
@@ -95,7 +90,7 @@ var GithubAvatar = function (_Component) {
   }, {
     key: 'renderCell',
     value: function renderCell(cell) {
-      var style = '\n      background-color: ' + (cell ? this.state.color : '#F0F0F0') + '\n    ';
+      var style = '\n      background-color: ' + (cell ? this.props.color : '#F0F0F0') + '\n    ';
       return dom('div', {
         'class': 'cell',
         style: style });
@@ -124,7 +119,7 @@ var App = function (_Component2) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      var users = this.state.users;
+      var users = this.props.users;
 
       return dom(
         'div',

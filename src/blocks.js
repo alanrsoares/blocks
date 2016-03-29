@@ -84,13 +84,13 @@ const render = (el) => {
 const dumpHTML = e =>
   append(document.createElement('div'), [e]).innerHTML
 
-export const mount = (componentClass, target, state) =>
-  new componentClass(`${target.id + className(componentClass)}`, state).mount(target)
+export const mount = (componentClass, target, props) =>
+  new componentClass(`${target.id + className(componentClass)}`, props).mount(target)
 
 export class Component {
-  constructor(id, state, ...children) {
+  constructor(id, props, ...children) {
     this.id = id
-    this.state = { ...state }
+    this.props = { ...props }
     this.children = children
   }
 
@@ -99,7 +99,7 @@ export class Component {
   }
 
   get renderedElement() {
-    return this.render(this.state)
+    return this.render(this.props)
   }
 
   valueOf() {
@@ -107,7 +107,7 @@ export class Component {
   }
 
   setState(partial = {}) {
-    this.state = { ...this.state, ...partial }
+    this.props = { ...this.props, ...partial }
     this.update()
   }
 
