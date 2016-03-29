@@ -15,7 +15,8 @@
     "UI",
     "React",
     "Redux",
-    "Components"
+    "Components",
+    "Virtual DOM"
   ],
   "author": "Alan R. Soares <alanrsoars@gmail.com> github.com/alanrsoares",
   "license": "MIT",
