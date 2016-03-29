@@ -1,4 +1,4 @@
-const { Component, $, mount, dom, setAttrs, append } = blocks
+const { Component, $, mount, h } = blocks
 
 const headsOrTails = () => Math.random() < .5
 
@@ -72,4 +72,4 @@ class App extends Component {
   }
 }
 
-mount(App, $('#appContainer'), { users: 30 })
+mount(App, $('#appContainer'), { users: 90 })

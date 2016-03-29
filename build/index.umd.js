@@ -16,6 +16,9 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.dom = dom;
+  exports.h = h;
+  exports.render = render;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -40,6 +43,18 @@
       return Constructor;
     };
   })();
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+        arr2[i] = arr[i];
+      }
+
+      return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -69,18 +84,6 @@
 
     return target;
   };
-
-  function _toConsumableArray(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-        arr2[i] = arr[i];
-      }
-
-      return arr2;
-    } else {
-      return Array.from(arr);
-    }
-  }
 
   var _ID = 'blocks-id';
 
@@ -113,6 +116,14 @@
     }, el);
   };
 
+  var dumpHTML = exports.dumpHTML = function dumpHTML(e) {
+    return append(document.createElement('div'), [e]).innerHTML;
+  };
+
+  var mount = exports.mount = function mount(componentClass, target, props) {
+    return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
+  };
+
   var className = function className(componentClass) {
     return ('_' + componentClass).match(/function ([A-Z]\w+)/)[1];
   };
@@ -125,7 +136,30 @@
     return isFunction(f) && f.bind(context)();
   };
 
-  var dom = exports.dom = function dom(tag, attrs) {
+  var isUnit = function isUnit(x) {
+    return typeof x === 'string' || typeof x === 'number';
+  };
+
+  var toArray = function toArray(x) {
+    return Object.keys(x).map(function (k) {
+      return x[k];
+    });
+  };
+
+  var child = function child(attrs) {
+    return function (el, i) {
+      if (isUnit(el)) return el;
+
+      var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
+
+      return _extends({}, el, {
+        attrs: _attrs,
+        children: (el.children || []).map(child(_attrs))
+      });
+    };
+  };
+
+  function dom(tag, attrs) {
     for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       children[_key - 2] = arguments[_key];
     }
@@ -137,22 +171,9 @@
     }
 
     return setAttrs(append(e, children), attrs);
-  };
+  }
 
-  var child = function child(attrs) {
-    return function (el, i) {
-      if (typeof el === 'string') return el;
-
-      var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
-
-      return _extends({}, el, {
-        attrs: _attrs,
-        children: el.children.map(child(_attrs))
-      });
-    };
-  };
-
-  function h(type, attrs) {
+  function h(tag, attrs) {
     var _attrs = _extends({}, attrs, _defineProperty({}, _ID, '1'));
 
     for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
@@ -160,29 +181,26 @@
     }
 
     return {
-      type: type,
+      tag: tag,
       attrs: _attrs,
       children: children.map(child(_attrs))
     };
   }
 
-  var render = function render(el) {
-    if (typeof el === 'string') return el;
-    var type = el.type;
+  function render(el) {
+    if (isUnit(el)) return el;
+    var tag = el.tag;
     var attrs = el.attrs;
-    var children = el.children;
-    var e = setAttrs(document.createElement(type), attrs);
-    if (children) append(e, children.map(render));
+    var _el$children = el.children;
+    var children = _el$children === undefined ? [] : _el$children;
+
+    if (children.length === 1 && !isUnit(children[0])) {
+      children = toArray(children[0]);
+    }
+
+    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().renderedElement : append(setAttrs(document.createElement(tag), attrs), children.map(render));
     return e;
-  };
-
-  var dumpHTML = function dumpHTML(e) {
-    return append(document.createElement('div'), [e]).innerHTML;
-  };
-
-  var mount = exports.mount = function mount(componentClass, target, props) {
-    return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
-  };
+  }
 
   var Component = exports.Component = (function () {
     function Component(id, props) {
@@ -190,6 +208,7 @@
 
       this.id = id;
       this.props = _extends({}, props);
+      this.state = {};
 
       for (var _len3 = arguments.length, children = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
         children[_key3 - 2] = arguments[_key3];
@@ -208,7 +227,7 @@
       value: function setState() {
         var partial = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-        this.props = _extends({}, this.props, partial);
+        this.state = _extends({}, this.state, partial);
         this.update();
       }
     }, {
@@ -242,7 +261,7 @@
     }, {
       key: 'renderedElement',
       get: function get() {
-        return this.render(this.props);
+        return render(this.render(this.props));
       }
     }]);
 

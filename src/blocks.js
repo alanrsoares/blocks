@@ -18,25 +18,47 @@ export const setAttrs = (el, attrs) =>
     return e
   }, el)
 
-export const append = (el, children) => {
-  return children.reduce((e, child, i) => {
+export const append = (el, children) =>
+  children.reduce((e, child, i) => {
     if (child instanceof HTMLElement)
       e.appendChild(child)
     else
       e.appendChild(document.createTextNode(`${child}`))
     return e
   }, el)
-}
+
+export const dumpHTML = e =>
+  append(document.createElement('div'), [e]).innerHTML
+
+export const mount = (componentClass, target, props) =>
+  new componentClass(`${target.id + className(componentClass)}`, props).mount(target)
 
 const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
 
-const isFunction = x =>
-  typeof x === 'function'
+const isFunction = x => typeof x === 'function'
 
-const callIfExist = (f, context) =>
-  isFunction(f) && f.bind(context)()
+const callIfExist = (f, context) => isFunction(f) && f.bind(context)()
 
-export const dom = (tag, attrs, ...children) => {
+const isUnit = x => (typeof x === 'string' || typeof x === 'number')
+
+const toArray = x => Object.keys(x).map(k => x[k])
+
+const child = attrs => (el, i) => {
+  if (isUnit(el)) return el
+
+  const _attrs = {
+    ...el.attrs,
+    [_ID]: attrs[_ID] + '.' + i
+  }
+
+  return {
+    ...el,
+    attrs: _attrs,
+    children: (el.children || []).map(child(_attrs))
+  }
+}
+
+export function dom (tag, attrs, ...children) {
   const e = (typeof tag === 'function')
     ? new tag(className(tag), (attrs || {}), ...children).render()
     : document.createElement(tag)
@@ -48,49 +70,37 @@ export const dom = (tag, attrs, ...children) => {
   return setAttrs(append(e, children), attrs)
 }
 
-const child = attrs => (el, i) => {
-  if (typeof el === 'string') return el
-
-  const _attrs = {
-    ...el.attrs,
-    [_ID]: attrs[_ID] + '.' + i
-  }
-
-  return {
-    ...el,
-    attrs: _attrs,
-    children: el.children.map(child(_attrs))
-  }
-}
-
-function h(type, attrs, ...children) {
+export function h (tag, attrs, ...children) {
   const _attrs = { ...attrs, [_ID]: '1' }
+
   return {
-    type,
+    tag,
     attrs: _attrs,
     children: children.map(child(_attrs))
   }
 }
 
-const render = (el) => {
-  if (typeof el === 'string') return el
-  const { type, attrs, children } = el
-  const e = setAttrs(document.createElement(type), attrs)
-  if (children) append(e, children.map(render))
+export function render (el) {
+  if (isUnit(el)) return el
+
+  let { tag, attrs, children = [] } = el
+
+  if (children.length === 1 && !isUnit(children[0])) {
+    children = toArray(children[0])
+  }
+
+  const e = (typeof tag === 'function')
+    ? new tag(className(tag), (attrs || {}), ...children).renderedElement
+    : append(setAttrs(document.createElement(tag), attrs), children.map(render))
+
   return e
 }
-
-// utilities
-const dumpHTML = e =>
-  append(document.createElement('div'), [e]).innerHTML
-
-export const mount = (componentClass, target, props) =>
-  new componentClass(`${target.id + className(componentClass)}`, props).mount(target)
 
 export class Component {
   constructor(id, props, ...children) {
     this.id = id
     this.props = { ...props }
+    this.state = {}
     this.children = children
   }
 
@@ -99,7 +109,7 @@ export class Component {
   }
 
   get renderedElement() {
-    return this.render(this.props)
+    return render(this.render(this.props))
   }
 
   valueOf() {
@@ -107,7 +117,7 @@ export class Component {
   }
 
   setState(partial = {}) {
-    this.props = { ...this.props, ...partial }
+    this.state = { ...this.state, ...partial }
     this.update()
   }
 
