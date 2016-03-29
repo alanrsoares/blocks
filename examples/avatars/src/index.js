@@ -1,10 +1,5 @@
 const { Component, $, mount, dom, setAttrs, append } = blocks
 
-// enable jsx resolution
-const React = {
-  createElement: dom
-}
-
 const headsOrTails = () => Math.random() < .5
 
 const range = n => [...Array(Math.max(0, n))]

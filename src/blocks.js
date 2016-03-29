@@ -1,3 +1,5 @@
+const _ID = 'blocks-id'
+
 export const $ = query =>
   (els => els.length > 1 ? els : els[0])(document.querySelectorAll(query))
 
@@ -46,6 +48,42 @@ export const dom = (tag, attrs, ...children) => {
   return setAttrs(append(e, children), attrs)
 }
 
+const child = attrs => (el, i) => {
+  if (typeof el === 'string') return el
+
+  const _attrs = {
+    ...el.attrs,
+    [_ID]: attrs[_ID] + '.' + i
+  }
+
+  return {
+    ...el,
+    attrs: _attrs,
+    children: el.children.map(child(_attrs))
+  }
+}
+
+function h(type, attrs, ...children) {
+  const _attrs = { ...attrs, [_ID]: '1' }
+  return {
+    type,
+    attrs: _attrs,
+    children: children.map(child(_attrs))
+  }
+}
+
+const render = (el) => {
+  if (typeof el === 'string') return el
+  const { type, attrs, children } = el
+  const e = setAttrs(document.createElement(type), attrs)
+  if (children) append(e, children.map(render))
+  return e
+}
+
+// utilities
+const dumpHTML = e =>
+  append(document.createElement('div'), [e]).innerHTML
+
 export const mount = (componentClass, target, state) =>
   new componentClass(`${target.id + className(componentClass)}`, state).mount(target)
 
@@ -57,7 +95,7 @@ export class Component {
   }
 
   get self() {
-    return $(`[data-blocks-id=${this.id}]`)
+    return $(`[${_ID}=${this.id}]`)
   }
 
   get renderedElement() {

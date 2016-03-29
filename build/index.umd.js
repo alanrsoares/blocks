@@ -17,20 +17,6 @@
     value: true
   });
 
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -55,6 +41,35 @@
     };
   })();
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
   function _toConsumableArray(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
@@ -66,6 +81,8 @@
       return Array.from(arr);
     }
   }
+
+  var _ID = 'blocks-id';
 
   var $ = exports.$ = function $(query) {
     return (function (els) {
@@ -122,6 +139,47 @@
     return setAttrs(append(e, children), attrs);
   };
 
+  var child = function child(attrs) {
+    return function (el, i) {
+      if (typeof el === 'string') return el;
+
+      var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
+
+      return _extends({}, el, {
+        attrs: _attrs,
+        children: el.children.map(child(_attrs))
+      });
+    };
+  };
+
+  function h(type, attrs) {
+    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, '1'));
+
+    for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+      children[_key2 - 2] = arguments[_key2];
+    }
+
+    return {
+      type: type,
+      attrs: _attrs,
+      children: children.map(child(_attrs))
+    };
+  }
+
+  var render = function render(el) {
+    if (typeof el === 'string') return el;
+    var type = el.type;
+    var attrs = el.attrs;
+    var children = el.children;
+    var e = setAttrs(document.createElement(type), attrs);
+    if (children) append(e, children.map(render));
+    return e;
+  };
+
+  var dumpHTML = function dumpHTML(e) {
+    return append(document.createElement('div'), [e]).innerHTML;
+  };
+
   var mount = exports.mount = function mount(componentClass, target, state) {
     return new componentClass('' + (target.id + className(componentClass)), state).mount(target);
   };
@@ -133,8 +191,8 @@
       this.id = id;
       this.state = _extends({}, state);
 
-      for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-        children[_key2 - 2] = arguments[_key2];
+      for (var _len3 = arguments.length, children = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
+        children[_key3 - 2] = arguments[_key3];
       }
 
       this.children = children;
@@ -179,7 +237,7 @@
     }, {
       key: 'self',
       get: function get() {
-        return $('[data-blocks-id=' + this.id + ']');
+        return $('[' + _ID + '=' + this.id + ']');
       }
     }, {
       key: 'renderedElement',
