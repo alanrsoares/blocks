@@ -180,16 +180,16 @@
     return append(document.createElement('div'), [e]).innerHTML;
   };
 
-  var mount = exports.mount = function mount(componentClass, target, state) {
-    return new componentClass('' + (target.id + className(componentClass)), state).mount(target);
+  var mount = exports.mount = function mount(componentClass, target, props) {
+    return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
   };
 
   var Component = exports.Component = (function () {
-    function Component(id, state) {
+    function Component(id, props) {
       _classCallCheck(this, Component);
 
       this.id = id;
-      this.state = _extends({}, state);
+      this.props = _extends({}, props);
 
       for (var _len3 = arguments.length, children = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
         children[_key3 - 2] = arguments[_key3];
@@ -208,7 +208,7 @@
       value: function setState() {
         var partial = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-        this.state = _extends({}, this.state, partial);
+        this.props = _extends({}, this.props, partial);
         this.update();
       }
     }, {
@@ -242,7 +242,7 @@
     }, {
       key: 'renderedElement',
       get: function get() {
-        return this.render(this.state);
+        return this.render(this.props);
       }
     }]);
 
