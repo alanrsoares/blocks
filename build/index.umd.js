@@ -159,10 +159,14 @@
   };
 
   function h(tag, attrs) {
-    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, '1'));
-
     for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       children[_key - 2] = arguments[_key];
+    }
+
+    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, attrs[_ID] || '1'));
+
+    if (children.length === 1 && !isUnit(children[0])) {
+      children = toArray(children[0]);
     }
 
     return {
@@ -178,11 +182,6 @@
     var attrs = el.attrs;
     var _el$children = el.children;
     var children = _el$children === undefined ? [] : _el$children;
-
-    if (children.length === 1 && !isUnit(children[0])) {
-      children = toArray(children[0]);
-    }
-
     var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().renderedElement : append(setAttrs(document.createElement(tag), attrs), children.map(render));
     return e;
   }
@@ -241,12 +240,13 @@
     }, {
       key: 'self',
       get: function get() {
-        return $('[' + _ID + '=' + this.id + ']');
+        return $('[' + _ID + '=' + this.props[_ID] + ']');
       }
     }, {
       key: 'renderedElement',
       get: function get() {
-        return render(this.render(this.props));
+        var e = h('div', _defineProperty({}, _ID, this.props[_ID]), [this.render(this.props)]);
+        return render(e.children[0]);
       }
     }]);
 

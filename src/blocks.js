@@ -59,7 +59,11 @@ const child = attrs => (el, i) => {
 }
 
 export function h (tag, attrs, ...children) {
-  const _attrs = { ...attrs, [_ID]: '1' }
+  const _attrs = { ...attrs, [_ID]: (attrs[_ID] || '1') }
+
+  if (children.length === 1 && !isUnit(children[0])) {
+    children = toArray(children[0])
+  }
 
   return {
     tag,
@@ -73,10 +77,6 @@ export function render (el) {
 
   let { tag, attrs, children = [] } = el
 
-  if (children.length === 1 && !isUnit(children[0])) {
-    children = toArray(children[0])
-  }
-
   const e = (typeof tag === 'function')
     ? new tag(className(tag), (attrs || {}), ...children).renderedElement
     : append(setAttrs(document.createElement(tag), attrs), children.map(render))
@@ -85,42 +85,43 @@ export function render (el) {
 }
 
 export class Component {
-  constructor(id, props, ...children) {
+  constructor (id, props, ...children) {
     this.id = id
     this.props = { ...props }
     this.state = {}
     this.children = children
   }
 
-  get self() {
-    return $(`[${_ID}=${this.id}]`)
+  get self () {
+    return $(`[${_ID}=${this.props[_ID]}]`)
   }
 
-  get renderedElement() {
-    return render(this.render(this.props))
+  get renderedElement () {
+    const e = h('div', { [_ID]: this.props[_ID] }, [this.render(this.props)])
+    return render(e.children[0])
   }
 
-  valueOf() {
+  valueOf () {
     return this.renderedElement
   }
 
-  setState(partial = {}) {
+  setState (partial = {}) {
     this.state = { ...this.state, ...partial }
     this.update()
   }
 
-  mount(target) {
+  mount (target) {
     this.unmount()
     callIfExist(this.onMount, this)
     append(target, [this.renderedElement])
   }
 
-  unmount() {
+  unmount () {
     callIfExist(this.onUnmount, this)
     if (this.self) { remove(this.self) }
   }
 
-  update() {
+  update () {
     callIfExist(this.onUpdate, this)
     if (this.self) {
       replace(this.self, this.renderedElement);
