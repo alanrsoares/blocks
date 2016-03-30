@@ -16,20 +16,8 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
+  exports.h = h;
+  exports.render = render;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -67,6 +55,37 @@
     }
   }
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  var _ID = 'blocks-id';
+
   var $ = exports.$ = function $(query) {
     return (function (els) {
       return els.length > 1 ? els : els[0];
@@ -96,6 +115,14 @@
     }, el);
   };
 
+  var dumpHTML = exports.dumpHTML = function dumpHTML(e) {
+    return append(document.createElement('div'), [e]).innerHTML;
+  };
+
+  var mount = exports.mount = function mount(componentClass, target, props) {
+    return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
+  };
+
   var className = function className(componentClass) {
     return ('_' + componentClass).match(/function ([A-Z]\w+)/)[1];
   };
@@ -108,30 +135,64 @@
     return isFunction(f) && f.bind(context)();
   };
 
-  var dom = exports.dom = function dom(tag, attrs) {
+  var isUnit = function isUnit(x) {
+    return typeof x === 'string' || typeof x === 'number';
+  };
+
+  var toArray = function toArray(x) {
+    return Object.keys(x).map(function (k) {
+      return x[k];
+    });
+  };
+
+  var child = function child(attrs) {
+    return function (el, i) {
+      if (isUnit(el)) return el;
+
+      var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
+
+      return _extends({}, el, {
+        attrs: _attrs,
+        children: (el.children || []).map(child(_attrs))
+      });
+    };
+  };
+
+  function h(tag, attrs) {
     for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       children[_key - 2] = arguments[_key];
     }
 
-    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().render() : document.createElement(tag);
+    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, attrs[_ID] || '1'));
 
-    if (children.length === 1 && Array.isArray(children[0])) {
-      children = children[0];
+    if (children.length === 1 && !isUnit(children[0])) {
+      children = toArray(children[0]);
     }
 
-    return setAttrs(append(e, children), attrs);
-  };
+    return {
+      tag: tag,
+      attrs: _attrs,
+      children: children.map(child(_attrs))
+    };
+  }
 
-  var mount = exports.mount = function mount(componentClass, target, state) {
-    return new componentClass('' + (target.id + className(componentClass)), state).mount(target);
-  };
+  function render(el) {
+    if (isUnit(el)) return el;
+    var tag = el.tag;
+    var attrs = el.attrs;
+    var _el$children = el.children;
+    var children = _el$children === undefined ? [] : _el$children;
+    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().renderedElement : append(setAttrs(document.createElement(tag), attrs), children.map(render));
+    return e;
+  }
 
   var Component = exports.Component = (function () {
-    function Component(id, state) {
+    function Component(id, props) {
       _classCallCheck(this, Component);
 
       this.id = id;
-      this.state = _extends({}, state);
+      this.props = _extends({}, props);
+      this.state = {};
 
       for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
         children[_key2 - 2] = arguments[_key2];
@@ -179,12 +240,13 @@
     }, {
       key: 'self',
       get: function get() {
-        return $('[data-blocks-id=' + this.id + ']');
+        return $('[' + _ID + '=' + this.props[_ID] + ']');
       }
     }, {
       key: 'renderedElement',
       get: function get() {
-        return this.render(this.state);
+        var e = h('div', _defineProperty({}, _ID, this.props[_ID]), [this.render(this.props)]);
+        return render(e.children[0]);
       }
     }]);
 

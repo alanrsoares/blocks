@@ -1,3 +1,5 @@
+const _ID = 'blocks-id'
+
 export const $ = query =>
   (els => els.length > 1 ? els : els[0])(document.querySelectorAll(query))
 
@@ -16,75 +18,106 @@ export const setAttrs = (el, attrs) =>
     return e
   }, el)
 
-export const append = (el, children) => {
-  return children.reduce((e, child, i) => {
+export const append = (el, children) =>
+  children.reduce((e, child, i) => {
     if (child instanceof HTMLElement)
       e.appendChild(child)
     else
       e.appendChild(document.createTextNode(`${child}`))
     return e
   }, el)
-}
+
+export const dumpHTML = e =>
+  append(document.createElement('div'), [e]).innerHTML
+
+export const mount = (componentClass, target, props) =>
+  new componentClass(`${target.id + className(componentClass)}`, props).mount(target)
 
 const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
 
-const isFunction = x =>
-  typeof x === 'function'
+const isFunction = x => typeof x === 'function'
 
-const callIfExist = (f, context) =>
-  isFunction(f) && f.bind(context)()
+const callIfExist = (f, context) => isFunction(f) && f.bind(context)()
 
-export const dom = (tag, attrs, ...children) => {
-  const e = (typeof tag === 'function')
-    ? new tag(className(tag), (attrs || {}), ...children).render()
-    : document.createElement(tag)
+const isUnit = x => (typeof x === 'string' || typeof x === 'number')
 
-  if (children.length === 1 && Array.isArray(children[0])) {
-    children = children[0]
+const toArray = x => Object.keys(x).map(k => x[k])
+
+const child = attrs => (el, i) => {
+  if (isUnit(el)) return el
+
+  const _attrs = {
+    ...el.attrs,
+    [_ID]: attrs[_ID] + '.' + i
   }
 
-  return setAttrs(append(e, children), attrs)
+  return {
+    ...el,
+    attrs: _attrs,
+    children: (el.children || []).map(child(_attrs))
+  }
 }
 
-export const mount = (componentClass, target, state) =>
-  new componentClass(`${target.id + className(componentClass)}`, state).mount(target)
+export function h (tag, attrs, ...children) {
+  const _attrs = { ...attrs, [_ID]: (attrs[_ID] || '1') }
+
+  if (children.length === 1 && !isUnit(children[0])) {
+    children = toArray(children[0])
+  }
+
+  return {
+    tag,
+    attrs: _attrs,
+    children: children.map(child(_attrs))
+  }
+}
+
+export function render (el) {
+  if (isUnit(el)) return el
+
+  let { tag, attrs, children = [] } = el
+
+  const e = (typeof tag === 'function')
+    ? new tag(className(tag), (attrs || {}), ...children).renderedElement
+    : append(setAttrs(document.createElement(tag), attrs), children.map(render))
+
+  return e
+}
 
 export class Component {
-  constructor(id, state, ...children) {
+  constructor (id, props, ...children) {
     this.id = id
-    this.state = { ...state }
+    this.state = {}
+    this.props = { ...props }
     this.children = children
   }
 
-  get self() {
-    return $(`[data-blocks-id=${this.id}]`)
+  get self () {
+    return $(`[${_ID}=${this.props[_ID]}]`)
   }
 
-  get renderedElement() {
-    return this.render(this.state)
+  get renderedElement () {
+    const e = h('div', { [_ID]: this.props[_ID] }, [this.render(this.props)])
+    return render(e.children[0])
   }
 
-  valueOf() {
-    return this.renderedElement
-  }
-
-  setState(partial = {}) {
+  setState (partial = {}) {
     this.state = { ...this.state, ...partial }
     this.update()
   }
 
-  mount(target) {
+  mount (target) {
     this.unmount()
     callIfExist(this.onMount, this)
     append(target, [this.renderedElement])
   }
 
-  unmount() {
+  unmount () {
     callIfExist(this.onUnmount, this)
     if (this.self) { remove(this.self) }
   }
 
-  update() {
+  update () {
     callIfExist(this.onUpdate, this)
     if (this.self) {
       replace(this.self, this.renderedElement);

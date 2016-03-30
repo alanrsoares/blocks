@@ -1,11 +1,12 @@
 {
   "name": "blocksjs",
-  "version": "0.2.0",
+  "version": "1.0.1",
   "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
   "main": "build/index.js",
   "scripts": {
     "dist": "babel src/blocks.js -o build/index.js",
-    "dist-umd": "babel --plugins transform-es2015-modules-umd src/blocks.js -o build/index.umd.js"
+    "dist-umd": "babel --plugins transform-es2015-modules-umd src/blocks.js -o build/index.umd.js",
+    "release": "./scripts/release"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,9 @@
   "devDependencies": {
     "babel-core": "^6.3.26",
     "babel-plugin-transform-es2015-modules-umd": "^6.3.13",
+    "babel-plugin-uglify": "^1.0.2",
     "babel-preset-es2015": "^6.3.13",
-    "babel-preset-stage-2": "^6.3.13"
+    "babel-preset-stage-2": "^6.3.13",
+    "releasy": "^1.5.6"
   }
 }

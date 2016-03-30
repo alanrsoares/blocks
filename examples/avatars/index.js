@@ -14,15 +14,8 @@ var _blocks = blocks;
 var Component = _blocks.Component;
 var $ = _blocks.$;
 var mount = _blocks.mount;
-var dom = _blocks.dom;
-var setAttrs = _blocks.setAttrs;
-var append = _blocks.append;
+var h = _blocks.h;
 
-// enable jsx resolution
-
-var React = {
-  createElement: dom
-};
 
 var headsOrTails = function headsOrTails() {
   return Math.random() < .5;
@@ -68,10 +61,10 @@ var GithubAvatar = function (_Component) {
   _createClass(GithubAvatar, [{
     key: 'render',
     value: function render() {
-      return dom(
+      return h(
         'div',
         { 'class': 'grid' },
-        this.renderRows(this.state.grid)
+        this.renderRows(this.props.grid)
       );
     }
   }, {
@@ -80,7 +73,7 @@ var GithubAvatar = function (_Component) {
       var _this2 = this;
 
       return rows.map(function (cells) {
-        return dom(
+        return h(
           'div',
           { 'class': 'row' },
           _this2.renderCells(cells)
@@ -95,8 +88,8 @@ var GithubAvatar = function (_Component) {
   }, {
     key: 'renderCell',
     value: function renderCell(cell) {
-      var style = '\n      background-color: ' + (cell ? this.state.color : '#F0F0F0') + '\n    ';
-      return dom('div', {
+      var style = '\n      background-color: ' + (cell ? this.props.color : '#F0F0F0') + '\n    ';
+      return h('div', {
         'class': 'cell',
         style: style });
     }
@@ -106,7 +99,7 @@ var GithubAvatar = function (_Component) {
 }(Component);
 
 var makeAvatar = function makeAvatar() {
-  return dom(GithubAvatar, {
+  return h(GithubAvatar, {
     color: randomColor(),
     grid: mirror(grid(5))
   });
@@ -124,27 +117,27 @@ var App = function (_Component2) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      var users = this.state.users;
+      var users = this.props.users;
 
-      return dom(
+      return h(
         'div',
         { 'class': 'app' },
-        dom(
+        h(
           'div',
           { 'class': 'header' },
-          dom(
+          h(
             'div',
             { 'class': 'title' },
             'Users'
           ),
-          dom(
+          h(
             'div',
             { 'class': 'number' },
             users,
             '‣'
           )
         ),
-        dom(
+        h(
           'div',
           { 'class': 'container' },
           range(users).map(makeAvatar)
@@ -156,4 +149,4 @@ var App = function (_Component2) {
   return App;
 }(Component);
 
-mount(App, $('#appContainer'), { users: 30 });
+mount(App, $('#appContainer'), { users: 90 });

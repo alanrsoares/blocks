@@ -1,0 +1,26 @@
+{
+  "name": "blocksjs",
+  "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
+  "main": "build/index.umd.js",
+  "authors": [
+    "Alan R. Soares <alanrsoars@gmail.com> github.com/alanrsoares"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "UI",
+    "React",
+    "Redux",
+    "Components",
+    "Virtual",
+    "DOM"
+  ],
+  "homepage": "https://github.com/alanrsoares/blocks",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
