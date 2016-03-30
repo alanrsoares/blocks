@@ -1,6 +1,6 @@
 {
   "name": "blocksjs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Micro react-like, redux-compatible, plain js library for event-driven ui components",
   "main": "build/index.umd.js",
   "authors": [
