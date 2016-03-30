@@ -163,7 +163,7 @@
       children[_key - 2] = arguments[_key];
     }
 
-    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, attrs[_ID] || '1'));
+    var _attrs = _extends({}, attrs, _defineProperty({}, _ID, (attrs || {})[_ID] || '1'));
 
     if (children.length === 1 && !isUnit(children[0])) {
       children = toArray(children[0]);
