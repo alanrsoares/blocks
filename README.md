@@ -1,4 +1,4 @@
-# blocks
+![blocks](blocks_title.png)
 Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
 ![](blocks.png)
