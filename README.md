@@ -4,6 +4,7 @@ Micro react-like, redux-compatible, plain JS library for event-driven ui compone
 
 ## Features
 
+* virtual DOM
 * react-like
 * jsx compatible
 * minimal
