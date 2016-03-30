@@ -87,8 +87,8 @@ export function render (el) {
 export class Component {
   constructor (id, props, ...children) {
     this.id = id
-    this.props = { ...props }
     this.state = {}
+    this.props = { ...props }
     this.children = children
   }
 
@@ -97,12 +97,8 @@ export class Component {
   }
 
   get renderedElement () {
-    const e = h('div', { [_ID]: `${this.id}${this.props[_ID]}` }, [this.render(this.props)])
+    const e = h('div', { [_ID]: this.props[_ID] }, [this.render(this.props)])
     return render(e.children[0])
-  }
-
-  valueOf () {
-    return this.renderedElement
   }
 
   setState (partial = {}) {
