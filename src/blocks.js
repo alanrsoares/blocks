@@ -41,6 +41,9 @@ const callIfExist = (f, context) => isFunction(f) && f.bind(context)()
 
 const isUnit = x => (typeof x === 'string' || typeof x === 'number')
 
+const isIndexedObject = x =>
+  typeof x === 'object' && Object.keys(x).reduce((acc, k) => acc && !isNaN(k), true)
+
 const toArray = x => Object.keys(x).map(k => x[k])
 
 const child = attrs => (el, i) => {
@@ -61,7 +64,7 @@ const child = attrs => (el, i) => {
 export function h (tag, attrs, ...children) {
   const _attrs = { ...attrs, [_ID]: ((attrs || {})[_ID] || '1') }
 
-  if (children.length === 1 && !isUnit(children[0])) {
+  if (children.length === 1 && isIndexedObject(children[0])) {
     children = toArray(children[0])
   }
 
