@@ -59,7 +59,7 @@ const child = attrs => (el, i) => {
 }
 
 export function h (tag, attrs, ...children) {
-  const _attrs = { ...attrs, [_ID]: (attrs[_ID] || '1') }
+  const _attrs = { ...attrs, [_ID]: ((attrs || {})[_ID] || '1') }
 
   if (children.length === 1 && !isUnit(children[0])) {
     children = toArray(children[0])
