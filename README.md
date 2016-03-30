@@ -2,8 +2,6 @@
 
 Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
-![](blocks.png)
-
 ## Features
 
 * react-like
