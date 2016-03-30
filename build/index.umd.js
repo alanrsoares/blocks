@@ -191,8 +191,8 @@
       _classCallCheck(this, Component);
 
       this.id = id;
-      this.props = _extends({}, props);
       this.state = {};
+      this.props = _extends({}, props);
 
       for (var _len2 = arguments.length, children = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
         children[_key2 - 2] = arguments[_key2];
@@ -202,11 +202,6 @@
     }
 
     _createClass(Component, [{
-      key: 'valueOf',
-      value: function valueOf() {
-        return this.renderedElement;
-      }
-    }, {
       key: 'setState',
       value: function setState() {
         var partial = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
