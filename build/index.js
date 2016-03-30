@@ -16,6 +16,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 var _ID = 'blocks-id';
 
 var $ = exports.$ = function $(query) {
@@ -71,6 +73,12 @@ var isUnit = function isUnit(x) {
   return typeof x === 'string' || typeof x === 'number';
 };
 
+var isIndexedObject = function isIndexedObject(x) {
+  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && Object.keys(x).reduce(function (acc, k) {
+    return acc && !isNaN(k);
+  }, true);
+};
+
 var toArray = function toArray(x) {
   return Object.keys(x).map(function (k) {
     return x[k];
@@ -97,7 +105,7 @@ function h(tag, attrs) {
 
   var _attrs = _extends({}, attrs, _defineProperty({}, _ID, (attrs || {})[_ID] || '1'));
 
-  if (children.length === 1 && !isUnit(children[0])) {
+  if (children.length === 1 && isIndexedObject(children[0])) {
     children = toArray(children[0]);
   }
 

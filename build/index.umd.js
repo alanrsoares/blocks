@@ -84,6 +84,10 @@
     return target;
   };
 
+  function _typeof(obj) {
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  }
+
   var _ID = 'blocks-id';
 
   var $ = exports.$ = function $(query) {
@@ -139,6 +143,12 @@
     return typeof x === 'string' || typeof x === 'number';
   };
 
+  var isIndexedObject = function isIndexedObject(x) {
+    return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && Object.keys(x).reduce(function (acc, k) {
+      return acc && !isNaN(k);
+    }, true);
+  };
+
   var toArray = function toArray(x) {
     return Object.keys(x).map(function (k) {
       return x[k];
@@ -165,7 +175,7 @@
 
     var _attrs = _extends({}, attrs, _defineProperty({}, _ID, (attrs || {})[_ID] || '1'));
 
-    if (children.length === 1 && !isUnit(children[0])) {
+    if (children.length === 1 && isIndexedObject(children[0])) {
       children = toArray(children[0]);
     }
 
