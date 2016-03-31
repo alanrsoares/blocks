@@ -18,7 +18,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-var _ID = 'blocks-id';
+// helpers
+
+var className = function className(componentClass) {
+  return ('_' + componentClass).match(/function ([A-Z]\w+)/)[1];
+};
+
+var isFunction = function isFunction(x) {
+  return typeof x === 'function';
+};
+
+var callIfExist = function callIfExist(f, context) {
+  return isFunction(f) && f.bind(context)();
+};
+
+var isUnit = function isUnit(x) {
+  return (function (y) {
+    return y === 'string' || y === 'number';
+  })(typeof x === 'undefined' ? 'undefined' : _typeof(x));
+};
+
+var isIndexedObject = function isIndexedObject(x) {
+  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && Object.keys(x).reduce(function (acc, k) {
+    return acc && !isNaN(k);
+  }, true);
+};
+
+var toArray = function toArray(indexed) {
+  return Object.keys(indexed).map(function (i) {
+    return indexed[i];
+  });
+};
+
+// private functions
+
+var _ID = 'data-blocks-id';
+
+var child = function child(attrs) {
+  return function (el, i) {
+    if (isUnit(el)) return el;
+
+    var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
+
+    return _extends({}, el, {
+      attrs: _attrs,
+      children: (el.children || []).map(child(_attrs))
+    });
+  };
+};
+
+// public API
 
 var $ = exports.$ = function $(query) {
   return (function (els) {
@@ -55,47 +104,6 @@ var dumpHTML = exports.dumpHTML = function dumpHTML(e) {
 
 var mount = exports.mount = function mount(componentClass, target, props) {
   return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
-};
-
-var className = function className(componentClass) {
-  return ('_' + componentClass).match(/function ([A-Z]\w+)/)[1];
-};
-
-var isFunction = function isFunction(x) {
-  return typeof x === 'function';
-};
-
-var callIfExist = function callIfExist(f, context) {
-  return isFunction(f) && f.bind(context)();
-};
-
-var isUnit = function isUnit(x) {
-  return typeof x === 'string' || typeof x === 'number';
-};
-
-var isIndexedObject = function isIndexedObject(x) {
-  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && Object.keys(x).reduce(function (acc, k) {
-    return acc && !isNaN(k);
-  }, true);
-};
-
-var toArray = function toArray(x) {
-  return Object.keys(x).map(function (k) {
-    return x[k];
-  });
-};
-
-var child = function child(attrs) {
-  return function (el, i) {
-    if (isUnit(el)) return el;
-
-    var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
-
-    return _extends({}, el, {
-      attrs: _attrs,
-      children: (el.children || []).map(child(_attrs))
-    });
-  };
 };
 
 function h(tag, attrs) {
