@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# lint source before any action
+npm run lint
+
 releasy=./node_modules/.bin/releasy
 type=$1 #[ major | minor | patch (default) ]
 npm run dist
