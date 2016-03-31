@@ -1,4 +1,35 @@
-const _ID = 'blocks-id'
+// helpers
+
+const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
+
+const isFunction = x => typeof x === 'function'
+
+const callIfExist = (f, context) => isFunction(f) && f.bind(context)()
+
+const isUnit = x => (y => (y === 'string' || y === 'number'))(typeof x)
+
+const isIndexedObject = x =>
+  typeof x === 'object' && Object.keys(x).reduce((acc, k) => acc && !isNaN(k), true)
+
+const toArray = indexed => Object.keys(indexed).map(i => indexed[i])
+
+// private functions
+
+const _ID = 'data-blocks-id'
+
+const child = attrs => (el, i) => {
+  if (isUnit(el)) return el
+
+  const _attrs = { ...el.attrs, [_ID]: `${attrs[_ID]}.${i}` }
+
+  return {
+    ...el,
+    attrs: _attrs,
+    children: (el.children || []).map(child(_attrs))
+  }
+}
+
+// public API
 
 export const $ = query =>
   (els => els.length > 1 ? els : els[0])(document.querySelectorAll(query))
@@ -32,34 +63,6 @@ export const dumpHTML = e =>
 
 export const mount = (componentClass, target, props) =>
   new componentClass(`${target.id + className(componentClass)}`, props).mount(target)
-
-const className = componentClass => `_${componentClass}`.match(/function ([A-Z]\w+)/)[1]
-
-const isFunction = x => typeof x === 'function'
-
-const callIfExist = (f, context) => isFunction(f) && f.bind(context)()
-
-const isUnit = x => (typeof x === 'string' || typeof x === 'number')
-
-const isIndexedObject = x =>
-  typeof x === 'object' && Object.keys(x).reduce((acc, k) => acc && !isNaN(k), true)
-
-const toArray = x => Object.keys(x).map(k => x[k])
-
-const child = attrs => (el, i) => {
-  if (isUnit(el)) return el
-
-  const _attrs = {
-    ...el.attrs,
-    [_ID]: attrs[_ID] + '.' + i
-  }
-
-  return {
-    ...el,
-    attrs: _attrs,
-    children: (el.children || []).map(child(_attrs))
-  }
-}
 
 export function h (tag, attrs, ...children) {
   const _attrs = { ...attrs, [_ID]: ((attrs || {})[_ID] || '1') }
