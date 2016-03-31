@@ -113,8 +113,8 @@
   };
 
   var toArray = function toArray(indexed) {
-    return Object.keys(indexed).map(function (i) {
-      return indexed[i];
+    return Object.keys(indexed).map(function (key) {
+      return indexed[key];
     });
   };
 
@@ -122,7 +122,9 @@
 
   var child = function child(attrs) {
     return function (el, i) {
-      if (isUnit(el)) return el;
+      if (isUnit(el)) {
+        return el;
+      }
 
       var _attrs = _extends({}, el.attrs, _defineProperty({}, _ID, attrs[_ID] + '.' + i));
 
@@ -150,14 +152,22 @@
   var setAttrs = exports.setAttrs = function setAttrs(el, attrs) {
     return Object.keys(attrs || {}).reduce(function (e, key) {
       var EVENT = /^on([A-Z]\w+)$/;
-      if (EVENT.test(key)) e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);else e.setAttribute(key, attrs[key]);
+      if (EVENT.test(key)) {
+        e.addEventListener(key.match(EVENT)[1].toLowerCase(), attrs[key]);
+      } else {
+        e.setAttribute(key, attrs[key]);
+      }
       return e;
     }, el);
   };
 
   var append = exports.append = function append(el, children) {
     return children.reduce(function (e, child, i) {
-      if (child instanceof HTMLElement) e.appendChild(child);else e.appendChild(document.createTextNode('' + child));
+      if (child instanceof window.HTMLElement) {
+        e.appendChild(child);
+      } else {
+        e.appendChild(document.createTextNode('' + child));
+      }
       return e;
     }, el);
   };
@@ -166,8 +176,8 @@
     return append(document.createElement('div'), [e]).innerHTML;
   };
 
-  var mount = exports.mount = function mount(componentClass, target, props) {
-    return new componentClass('' + (target.id + className(componentClass)), props).mount(target);
+  var mount = exports.mount = function mount(ComponentClass, target, props) {
+    return new ComponentClass('' + (target.id + className(ComponentClass)), props).mount(target);
   };
 
   function h(tag, attrs) {
@@ -190,11 +200,11 @@
 
   function render(el) {
     if (isUnit(el)) return el;
-    var tag = el.tag;
     var attrs = el.attrs;
     var _el$children = el.children;
     var children = _el$children === undefined ? [] : _el$children;
-    var e = typeof tag === 'function' ? new (Function.prototype.bind.apply(tag, [null].concat([className(tag), attrs || {}], _toConsumableArray(children))))().renderedElement : append(setAttrs(document.createElement(tag), attrs), children.map(render));
+    var Tag = el.tag;
+    var e = typeof Tag === 'function' ? new (Function.prototype.bind.apply(Tag, [null].concat([className(Tag), attrs || {}], _toConsumableArray(children))))().renderedElement : append(setAttrs(document.createElement(Tag), attrs), children.map(render));
     return e;
   }
 
