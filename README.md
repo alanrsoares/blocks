@@ -2,6 +2,8 @@
 
 Micro react-like, redux-compatible, plain JS library for event-driven ui components
 
+![npm](https://img.shields.io/npm/v/blocksjs.svg)
+
 ## Features
 
 * virtual DOM
